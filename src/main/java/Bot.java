@@ -5,19 +5,36 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Bot extends TelegramLongPollingBot {
+    //    private long chat_id;
+//    String lastMessage = "";
+//    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+
+    //    public String getMessage(String msg){
+//        ArrayList<KeyboardRow> keyboard = new ArrayList<>();
+//        KeyboardRow keyboardFirstRow = new KeyboardRow();
+//        KeyboardRow keyboardSecondRow = new KeyboardRow();
+//
+//        replyKeyboardMarkup.setSelective(true);
+//        replyKeyboardMarkup.setResizeKeyboard(true);
+//        replyKeyboardMarkup.setOneTimeKeyboard(false);
+//
+//        if (msg.equals())
+//
+//        return "Выбрать...";
+//    }
 
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
 
         if (message != null & message.hasText()) {
-            switch (message.getText()) {
+            switch (message.getText().toLowerCase()) {
                 case "/help": {
                     sendMsg(message, "Help!");
                     break;
                 }
                 case "/test": {
-                    sendMsg(message,"Test passed");
+                    sendMsg(message, "Test passed");
                     break;
                 }
 
@@ -26,8 +43,6 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 }
             }
-
-
         }
     }
 
