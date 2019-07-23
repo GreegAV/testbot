@@ -5,46 +5,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Bot extends TelegramLongPollingBot {
-    //    private long chat_id;
-//    String lastMessage = "";
-//    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-
-    //    public String getMessage(String msg){
-//        ArrayList<KeyboardRow> keyboard = new ArrayList<>();
-//        KeyboardRow keyboardFirstRow = new KeyboardRow();
-//        KeyboardRow keyboardSecondRow = new KeyboardRow();
-//
-//        replyKeyboardMarkup.setSelective(true);
-//        replyKeyboardMarkup.setResizeKeyboard(true);
-//        replyKeyboardMarkup.setOneTimeKeyboard(false);
-//
-//        if (msg.equals())
-//
-//        return "Выбрать...";
-//    }
-
-    @Override
-    public void onUpdateReceived(Update update) {
-        Message message = update.getMessage();
-
-        if (message != null & message.hasText()) {
-            switch (message.getText().toLowerCase()) {
-                case "/help": {
-                    sendMsg(message, "Help!");
-                    break;
-                }
-                case "/test": {
-                    sendMsg(message, "Test passed");
-                    break;
-                }
-
-                default: {
-                    sendMsg(message, "Default text");
-                    break;
-                }
-            }
-        }
-    }
 
     private void sendMsg(Message message, String default_text) {
         SendMessage sendMessage = new SendMessage();
@@ -58,6 +18,41 @@ public class Bot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onUpdateReceived(Update update) {
+        Message message = update.getMessage();
+
+        if (message != null & message.hasText()) {
+            switch (message.getText().toLowerCase()) {
+                case "/help": {
+                    showHelpMessage(message);
+                    break;
+                }
+                case "/test": {
+                    showTestMessage(message);
+                    break;
+                }
+
+                default: {
+                    showDefaultMessage(message);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void showDefaultMessage(Message message) {
+        sendMsg(message, "Default text");
+    }
+
+    private void showTestMessage(Message message) {
+        sendMsg(message, "Test passed");
+    }
+
+    private void showHelpMessage(Message message) {
+        sendMsg(message, "Help!");
     }
 
     @Override
