@@ -1,3 +1,5 @@
+package com.obrttestbot;
+
 import java.util.ResourceBundle;
 
 public class Config {
