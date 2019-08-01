@@ -28,12 +28,12 @@ public class Config {
 
     public static void loadProperties() {
         Config config = Config.getInstance();
-        System.out.println("Config loaded");
 
         BOT_NAME = config.getProperty("botName");
         BOT_TOKEN = config.getProperty("botToken");
         APPLICATION_NAME = config.getProperty("appName");
         SPREADSHEET_URL = config.getProperty("sheetsURL");
-        System.out.println();
+
+        System.out.println("Config loaded");
     }
 }
