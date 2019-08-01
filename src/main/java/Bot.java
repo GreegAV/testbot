@@ -109,7 +109,6 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void logToSheets(Update update) {
-        System.out.println("logging...");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
 
@@ -131,13 +130,14 @@ public class Bot extends TelegramLongPollingBot {
             if (update.getMessage().getFrom().getLastName() != null)
                 userName += "." + update.getMessage().getFrom().getLastName();
             if (update.getMessage().getFrom().getUserName() != null)
-                userName += "." + update.getMessage().getFrom().getUserName();
+                userName += "(" + update.getMessage().getFrom().getUserName()+")";
         }
         String textFromBot = date + " " + userName + " " + update.getMessage().getText();
         List<String> sentence = Arrays.asList(textFromBot.split(" "));
+        System.out.println(sentence.get(3));
+        System.out.println(sentence.get(3).startsWith("/"));
 
         try {
-
             Service.writeToSheet(Service.getSheetsService(), sentence, sheetName);
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
