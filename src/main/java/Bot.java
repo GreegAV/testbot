@@ -1,4 +1,3 @@
-import Staff.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -124,24 +123,40 @@ public class Bot extends TelegramLongPollingBot {
 //        if (userID == 548498472) {
 //            sheetName = "Росочинская";
 //        }
-        if (sheetName.equals("General")) {
-            if (update.getMessage().getFrom().getFirstName() != null)
-                userName = update.getMessage().getFrom().getFirstName();
-            if (update.getMessage().getFrom().getLastName() != null)
-                userName += "." + update.getMessage().getFrom().getLastName();
-            if (update.getMessage().getFrom().getUserName() != null)
-                userName += "(" + update.getMessage().getFrom().getUserName()+")";
+        String textFromBot = update.getMessage().getText();
+        boolean command = textFromBot.charAt(0) == '/';
+        if (command) {
+            sheetName = "Test";
+            textFromBot = do_smth_w_commands(textFromBot);
+        } else {
+            if (sheetName.equals("General")) {
+                if (update.getMessage().getFrom().getFirstName() != null) {
+                    userName = update.getMessage().getFrom().getFirstName();
+                }
+                if (update.getMessage().getFrom().getLastName() != null) {
+                    userName += "." + update.getMessage().getFrom().getLastName();
+                }
+                if (update.getMessage().getFrom().getUserName() != null) {
+                    userName += "(" + update.getMessage().getFrom().getUserName() + ")";
+                }
+                textFromBot = date + " " + userName + " " + textFromBot;
+            }
+
         }
-        String textFromBot = date + " " + userName + " " + update.getMessage().getText();
+
         List<String> sentence = Arrays.asList(textFromBot.split(" "));
-        System.out.println(sentence.get(3));
-        System.out.println(sentence.get(3).startsWith("/"));
 
         try {
-            Service.writeToSheet(Service.getSheetsService(), sentence, sheetName);
+            Service.writeToSheet(sentence, sheetName);
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private String do_smth_w_commands(String initText) {
+        //todo implement this
+        return initText.substring(initText.indexOf(" ")+1);
     }
 
     @Override
