@@ -23,6 +23,8 @@ public class Config {
 
     public static String BOT_NAME;
     public static String BOT_TOKEN;
+    public static String APPLICATION_NAME;
+    public static String SPREADSHEET_URL;
 
     public static void loadProperties() {
         Config config = Config.getInstance();
@@ -30,5 +32,8 @@ public class Config {
 
         BOT_NAME = config.getProperty("botName");
         BOT_TOKEN = config.getProperty("botToken");
+        APPLICATION_NAME = config.getProperty("appName");
+        SPREADSHEET_URL = config.getProperty("sheetsURL");
+        System.out.println();
     }
 }
