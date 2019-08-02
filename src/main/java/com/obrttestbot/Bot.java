@@ -4,11 +4,15 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -75,23 +79,41 @@ public class Bot extends TelegramLongPollingBot {
 //
 //    }
 
+    public synchronized void setButtons(SendMessage sendMessage) {
+        // Создаем клавиуатуру
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        // Создаем список строк клавиатуры
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+        // Первая строчка клавиатуры
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        // Добавляем кнопки в первую строчку клавиатуры
+        keyboardFirstRow.add(new KeyboardButton("Привет"));
+
+        // Вторая строчка клавиатуры
+        KeyboardRow keyboardSecondRow = new KeyboardRow();
+        // Добавляем кнопки во вторую строчку клавиатуры
+        keyboardSecondRow.add(new KeyboardButton("Помощь"));
+
+        // Добавляем все строчки клавиатуры в список
+        keyboard.add(keyboardFirstRow);
+        keyboard.add(keyboardSecondRow);
+        // и устанваливаем этот список нашей клавиатуре
+        replyKeyboardMarkup.setKeyboard(keyboard);
+    }
+
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
 
         if (message != null & message.hasText()) {
             logToSheets(update);
-            if (message.getText().toLowerCase().equals("/time")) {
-                Date currentDate = new Date();
-                long chat_id = update.getMessage().getChatId();
-                String messageSend = currentDate.toString();
-                SendMessage messg = new SendMessage().setChatId(chat_id).setText(messageSend);
-                try {
-                    execute(messg); // Sending our message object to user
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
+
         }
     }
 
@@ -129,7 +151,7 @@ public class Bot extends TelegramLongPollingBot {
         boolean command = textFromBot.charAt(0) == '/';
         if (command) {
             sheetName = "Test";
-            textFromBot = do_smth_w_commands(textFromBot);
+            textFromBot = do_smth_w_commands(update);
         } else {
             if (sheetName.equals("General")) {
                 if (update.getMessage().getFrom().getFirstName() != null) {
@@ -156,9 +178,21 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-    private String do_smth_w_commands(String initText) {
+    private String do_smth_w_commands(Update update) {
         //todo implement this
-        return initText.substring(initText.indexOf(" ")+1);
+        if (update.getMessage().getText().equals("/time")) {
+            Date currentDate = new Date();
+            long chat_id = update.getMessage().getChatId();
+            String messageSend = currentDate.toString();
+            SendMessage messg = new SendMessage().setChatId(chat_id).setText(messageSend);
+            try {
+                execute(messg); // Sending our message object to user
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+        return update.getMessage().getText().substring(update.getMessage().getText().indexOf(" ") + 1);
     }
 
     @Override
