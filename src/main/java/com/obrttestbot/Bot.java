@@ -9,11 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -112,7 +108,20 @@ public class Bot extends TelegramLongPollingBot {
         Message message = update.getMessage();
 
         if (message != null & message.hasText()) {
-            logToSheets(update);
+
+            if (update.getMessage().getText().equals("/time")) {
+                Date currentDate = new Date();
+                long chat_id = update.getMessage().getChatId();
+                String messageSend = currentDate.toString();
+                SendMessage messg = new SendMessage().setChatId(chat_id).setText(messageSend);
+                try {
+                    execute(messg); // Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Service.logToSheets(update);
+            }
 
         }
     }
@@ -131,69 +140,6 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private void logToSheets(Update update) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
-
-        long userID = update.getMessage().getChatId();
-        String sheetName = "General";
-        String userName = "";
-//        if (userID == 221816696) {
-//            sheetName = "Test";
-//        }
-//        if (userID == 148370030) {
-//            sheetName = "Батова";
-//        }
-//        if (userID == 548498472) {
-//            sheetName = "Росочинская";
-//        }
-        String textFromBot = update.getMessage().getText();
-        boolean command = textFromBot.charAt(0) == '/';
-        if (command) {
-            sheetName = "Test";
-            textFromBot = do_smth_w_commands(update);
-        } else {
-            if (sheetName.equals("General")) {
-                if (update.getMessage().getFrom().getFirstName() != null) {
-                    userName = update.getMessage().getFrom().getFirstName();
-                }
-                if (update.getMessage().getFrom().getLastName() != null) {
-                    userName += "." + update.getMessage().getFrom().getLastName();
-                }
-                if (update.getMessage().getFrom().getUserName() != null) {
-                    userName += "(" + update.getMessage().getFrom().getUserName() + ")";
-                }
-                textFromBot = date + " " + userName + " " + textFromBot;
-            }
-
-        }
-
-        List<String> sentence = Arrays.asList(textFromBot.split(" "));
-
-        try {
-            Service.writeToSheet(sentence, sheetName);
-        } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private String do_smth_w_commands(Update update) {
-        //todo implement this
-        if (update.getMessage().getText().equals("/time")) {
-            Date currentDate = new Date();
-            long chat_id = update.getMessage().getChatId();
-            String messageSend = currentDate.toString();
-            SendMessage messg = new SendMessage().setChatId(chat_id).setText(messageSend);
-            try {
-                execute(messg); // Sending our message object to user
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-            return "";
-        }
-        return update.getMessage().getText().substring(update.getMessage().getText().indexOf(" ") + 1);
-    }
 
     @Override
     public String getBotUsername() {
