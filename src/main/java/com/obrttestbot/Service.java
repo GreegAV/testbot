@@ -1,6 +1,5 @@
 package com.obrttestbot;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -13,7 +12,7 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
-
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,34 +95,14 @@ public class Service {
         long userID = update.getMessage().getChatId();
         String sheetName = "General";
         String userName = "";
-//        if (userID == 221816696) {
-//            sheetName = "Test";
-//        }
-//        if (userID == 148370030) {
-//            sheetName = "Батова";
-//        }
-//        if (userID == 548498472) {
-//            sheetName = "Росочинская";
-//        }
         String textFromBot = update.getMessage().getText();
-        boolean command = textFromBot.charAt(0) == '/';
-        if (command) {
+        boolean isCommand = textFromBot.charAt(0) == '/';
+        if (isCommand) {
             sheetName = "Test";
+            String command = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
             textFromBot = cutCommandFromMessage(update);
         } else {
-            if (sheetName.equals("General")) {
-                if (update.getMessage().getFrom().getFirstName() != null) {
-                    userName = update.getMessage().getFrom().getFirstName();
-                }
-                if (update.getMessage().getFrom().getLastName() != null) {
-                    userName += "." + update.getMessage().getFrom().getLastName();
-                }
-                if (update.getMessage().getFrom().getUserName() != null) {
-                    userName += "(" + update.getMessage().getFrom().getUserName() + ")";
-                }
-                textFromBot = date + " " + userName + " " + textFromBot;
-            }
-
+            textFromBot = date + " " + formatUserName(update) + " " + textFromBot;
         }
 
         List<String> sentence = Arrays.asList(textFromBot.split(" "));
@@ -133,6 +112,23 @@ public class Service {
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
+    }
+
+    private static String formatUserName(Update update) {
+        StringBuffer stringBuffer = new StringBuffer();
+        if (update.getMessage().getFrom().getFirstName() != null) {
+            stringBuffer.append(update.getMessage().getFrom().getFirstName());
+        }
+        if (update.getMessage().getFrom().getLastName() != null) {
+            stringBuffer.append(".");
+            stringBuffer.append(update.getMessage().getFrom().getLastName());
+        }
+        if (update.getMessage().getFrom().getUserName() != null) {
+            stringBuffer.append("(");
+            stringBuffer.append(update.getMessage().getFrom().getUserName());
+            stringBuffer.append(")");
+        }
+        return stringBuffer.toString();
     }
 
     public static String cutCommandFromMessage(Update update) {
