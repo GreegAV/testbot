@@ -97,19 +97,6 @@ public class Bot extends TelegramLongPollingBot {
                     Service.logToSheets(update);
                     break;
             }
-//            if (update.getMessage().getText().equals("/time")) {
-//                long chat_id = update.getMessage().getChatId();
-//                SendMessage messg = new SendMessage()
-//                        .setChatId(chat_id)
-//                        .setText(new Date().toString());
-//                try {
-//                    execute(messg); // Sending our message object to user
-//                } catch (TelegramApiException e) {
-//                    e.printStackTrace();
-//                }
-//            } else {
-//                Service.logToSheets(update);
-//            }
         } else {
             if (!message.hasText()) {
                 //TODO обработка стикеров, фоточек и т.д.
