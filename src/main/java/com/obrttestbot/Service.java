@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-
 public class Service {
     private static Sheets sheetsService;
 
