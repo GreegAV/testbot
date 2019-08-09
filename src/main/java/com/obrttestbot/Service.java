@@ -60,7 +60,7 @@ public class Service {
         if (isCommand) {
             sheetName = "Test";
             String command = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
-            textFromBot = cutCommandFromMessage(update);
+            textFromBot = trimFirstWordFromMessage(textFromBot);
         } else {
             textFromBot = date + " " + formatUserName(update) + " " + textFromBot;
         }
@@ -74,25 +74,67 @@ public class Service {
         }
     }
 
-    private static String formatUserName(Update update) {
-        StringBuffer stringBuffer = new StringBuffer();
-        if (update.getMessage().getFrom().getFirstName() != null) {
-            stringBuffer.append(update.getMessage().getFrom().getFirstName());
+    public static void logToBudget(Update update) {
+        String sheetName = "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
+
+        // Prepare string for logging into budget
+        StringBuilder textToLog = new StringBuilder();
+
+        //add date of operation
+        textToLog.append(date);
+        textToLog.append(" ");
+
+        //add name of author of operation
+        textToLog.append(formatUserName(update));
+        textToLog.append(" ");
+
+        //trim the command /budget from the logstring
+        String sourceMessage = trimFirstWordFromMessage(update.getMessage().getText());
+
+        // cutting out the summ
+        String sumString = sourceMessage.substring(0, sourceMessage.indexOf(" "));
+        sumString = sumString.replace(',', '.');
+        double summa = Double.parseDouble(sumString);
+        textToLog.append(summa);
+        textToLog.append(" ");
+        if (summa >= 0) {
+            sheetName = "Приход";
+        } else {
+            sheetName = "Расход";
         }
-        if (update.getMessage().getFrom().getLastName() != null) {
-            stringBuffer.append(".");
-            stringBuffer.append(update.getMessage().getFrom().getLastName());
+        //trim the summ from the logstring and log the rest of the message
+        textToLog.append(trimFirstWordFromMessage(sourceMessage));
+
+        List<String> sentence = Arrays.asList(textToLog.toString().split(" "));
+
+        try {
+            Service.writeToSheet(sentence, sheetName);
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
         }
-        if (update.getMessage().getFrom().getUserName() != null) {
-            stringBuffer.append("(");
-            stringBuffer.append(update.getMessage().getFrom().getUserName());
-            stringBuffer.append(")");
-        }
-        return stringBuffer.toString();
     }
 
-    private static String cutCommandFromMessage(Update update) {
-        return update.getMessage().getText().substring(update.getMessage().getText().indexOf(" ") + 1);
+    private static String formatUserName(Update update) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (update.getMessage().getFrom().getFirstName() != null) {
+            stringBuilder.append(update.getMessage().getFrom().getFirstName());
+        }
+        if (update.getMessage().getFrom().getLastName() != null) {
+            stringBuilder.append(".");
+            stringBuilder.append(update.getMessage().getFrom().getLastName());
+        }
+        if (update.getMessage().getFrom().getUserName() != null) {
+            stringBuilder.append("(");
+            stringBuilder.append(update.getMessage().getFrom().getUserName());
+            stringBuilder.append(")");
+        }
+        return stringBuilder.toString();
+    }
+
+    private static String trimFirstWordFromMessage(String string4Trim) {
+        return string4Trim.substring(string4Trim.indexOf(" ") + 1);
     }
 
 }

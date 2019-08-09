@@ -75,20 +75,41 @@ public class Bot extends TelegramLongPollingBot {
         Message message = update.getMessage();
 
         if (message != null & message.hasText()) {
-
-            if (update.getMessage().getText().equals("/time")) {
-                Date currentDate = new Date();
-                long chat_id = update.getMessage().getChatId();
-                String messageSend = currentDate.toString();
-                SendMessage messg = new SendMessage().setChatId(chat_id).setText(messageSend);
-                try {
-                    execute(messg); // Sending our message object to user
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
+            String firstWord = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
+            switch (firstWord) {
+                case "/time": {
+                    long chat_id = update.getMessage().getChatId();
+                    SendMessage messg = new SendMessage()
+                            .setChatId(chat_id)
+                            .setText(new Date().toString());
+                    try {
+                        execute(messg); // Sending our message object to user
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 }
-            } else {
-                Service.logToSheets(update);
+                case "/budget": {
+                    Service.logToBudget(update);
+                    break;
+                }
+                default:
+                    Service.logToSheets(update);
+                    break;
             }
+//            if (update.getMessage().getText().equals("/time")) {
+//                long chat_id = update.getMessage().getChatId();
+//                SendMessage messg = new SendMessage()
+//                        .setChatId(chat_id)
+//                        .setText(new Date().toString());
+//                try {
+//                    execute(messg); // Sending our message object to user
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                Service.logToSheets(update);
+//            }
         } else {
             if (!message.hasText()) {
                 //TODO обработка стикеров, фоточек и т.д.
