@@ -15,7 +15,7 @@ import java.util.List;
 public class Service {
     private static Sheets sheetsService;
 
-    public static void writeToSheet(List<String> sentence, String sheetName) throws IOException, GeneralSecurityException {
+    private static void writeToSheet(List<String> sentence, String sheetName) throws IOException, GeneralSecurityException {
         sheetsService = GoogleTools.getSheetsService();
 
         ValueRange appendBody = new ValueRange()
@@ -48,7 +48,7 @@ public class Service {
         }
     }
 
-    public static void logToSheets(Update update) {
+    static void logToSheets(Update update) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
 
@@ -74,8 +74,9 @@ public class Service {
         }
     }
 
-    public static void logToBudget(Update update) {
-        String sheetName = "";
+    static void logToBudget(Update update) {
+        String sheetName = "Расход";
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
 
@@ -100,9 +101,7 @@ public class Service {
         textToLog.append(summa);
         textToLog.append(" ");
         if (summa >= 0) {
-            sheetName = "Приход";
-        } else {
-            sheetName = "Расход";
+            sheetName = "Приход"; //by default - Расход
         }
         //trim the summ from the logstring and log the rest of the message
         textToLog.append(trimFirstWordFromMessage(sourceMessage));
