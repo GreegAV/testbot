@@ -15,7 +15,7 @@ import java.util.List;
 public class Service {
     private static Sheets sheetsService;
 
-    private static void writeToSheet(List<String> sentence, String sheetName) throws IOException, GeneralSecurityException {
+    private static void writeToSheet(List<Object> sentence, String sheetName) throws IOException, GeneralSecurityException {
         sheetsService = GoogleTools.getSheetsService();
 
         ValueRange appendBody = new ValueRange()
@@ -65,7 +65,7 @@ public class Service {
             textFromBot = date + " " + formatUserName(update) + " " + textFromBot;
         }
 
-        List<String> sentence = Arrays.asList(textFromBot.split(" "));
+        List<Object> sentence = Arrays.asList(textFromBot.split(" "));
 
         try {
             Service.writeToSheet(sentence, sheetName);
@@ -96,17 +96,18 @@ public class Service {
 
         // cutting out the summ
         String sumString = sourceMessage.substring(0, sourceMessage.indexOf(" "));
-        sumString = sumString.replace(',', '.');
-        double summa = Double.parseDouble(sumString);
-        textToLog.append(summa);
+        sumString=sumString.replace('.', ',');
+        textToLog.append(sumString);
         textToLog.append(" ");
+
+        double summa = Double.parseDouble(sumString.replace(',', '.'));
         if (summa >= 0) {
             sheetName = "Приход"; //by default - Расход
         }
         //trim the summ from the logstring and log the rest of the message
         textToLog.append(trimFirstWordFromMessage(sourceMessage));
 
-        List<String> sentence = Arrays.asList(textToLog.toString().split(" "));
+        List<Object> sentence = Arrays.asList(textToLog.toString().split(" "));
 
         try {
             Service.writeToSheet(sentence, sheetName);
