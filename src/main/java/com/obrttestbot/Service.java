@@ -96,14 +96,17 @@ public class Service {
 
         // cutting out the summ
         String sumString = sourceMessage.substring(0, sourceMessage.indexOf(" "));
-        sumString=sumString.replace('.', ',');
-        textToLog.append(sumString);
-        textToLog.append(" ");
+        sumString = sumString.replace('.', ',').trim();
 
         double summa = Double.parseDouble(sumString.replace(',', '.'));
         if (summa >= 0) {
             sheetName = "Приход"; //by default - Расход
+        } else {
+            sumString=sumString.replace('-',' ').trim();
         }
+        textToLog.append(sumString);
+        textToLog.append(" ");
+
         //trim the summ from the logstring and log the rest of the message
         textToLog.append(trimFirstWordFromMessage(sourceMessage));
 
