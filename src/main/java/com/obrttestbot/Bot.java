@@ -75,7 +75,12 @@ public class Bot extends TelegramLongPollingBot {
         Message message = update.getMessage();
 
         if (message != null & message.hasText()) {
-            String firstWord = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
+            String firstWord;
+            if (update.getMessage().getText().indexOf(" ") > 0) {
+                firstWord = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
+            } else {
+                firstWord = update.getMessage().getText();
+            }
             switch (firstWord) {
                 case "/time": {
                     long chat_id = update.getMessage().getChatId();
