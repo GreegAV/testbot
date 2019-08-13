@@ -4,9 +4,14 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
     // По правильному, это надо было сделать отдельной веткой в гитхабе, но так сложилось :(
@@ -83,11 +88,12 @@ public class Bot extends TelegramLongPollingBot {
             }
             switch (firstWord) {
                 case "/time": {
-                    long chat_id = update.getMessage().getChatId();
+//                    long chat_id = update.getMessage().getChatId();
                     SendMessage messg = new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(update.getMessage().getChatId())
                             .setText(new Date().toString());
                     try {
+                        setButtons(messg);
                         execute(messg); // Sending our message object to user
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
@@ -95,10 +101,12 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 }
                 case "/budget": {
+                    setButtons(new SendMessage().setChatId(update.getMessage().getChatId()));
                     Service.logToBudget(update);
                     break;
                 }
                 default:
+                    setButtons(new SendMessage().setChatId(update.getMessage().getChatId()));
                     Service.logToSheets(update);
                     break;
             }
@@ -107,6 +115,23 @@ public class Bot extends TelegramLongPollingBot {
                 //TODO обработка стикеров, фоточек и т.д.
             }
         }
+    }
+
+    public void setButtons(SendMessage sendMessage) {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        keyboardFirstRow.add(new KeyboardButton("First button"));
+        keyboardFirstRow.add(new KeyboardButton("Second button"));
+
+        keyboardRowList.add(keyboardFirstRow);
+        replyKeyboardMarkup.setKeyboard(keyboardRowList);
+
     }
 
     private void sendMsg(Message message, String default_text) {
