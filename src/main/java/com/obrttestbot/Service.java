@@ -75,6 +75,13 @@ public class Service {
     }
 
     static void logToBudget(Update update) {
+        //   0      1           2          3       4      5        6          7
+        // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
+        String[] resultString = new String[8];
+        for (int i = 0; i < 8; i++) {
+            resultString[i] = " ";
+        }
+
         String sheetName = "Расход";
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -84,11 +91,14 @@ public class Service {
         StringBuilder textToLog = new StringBuilder();
 
         //add date of operation
+        resultString[0] = date;
         textToLog.append(date);
         textToLog.append(" ");
 
         //add name of author of operation
-        textToLog.append(formatUserName(update));
+        String kontragent = formatUserName(update);
+        resultString[2] = kontragent;
+        textToLog.append(kontragent);
         textToLog.append(" ");
 
         //trim the command /budget from the logstring
@@ -101,19 +111,31 @@ public class Service {
         double summa = Double.parseDouble(sumString.replace(',', '.'));
         if (summa >= 0) {
             sheetName = "Приход"; //by default - Расход
+            resultString[3] = sumString;
+            resultString[4] = " ";
+            resultString[5] = sumString;
+            resultString[6] = "1. Доход";
         } else {
-            sumString=sumString.replace('-',' ').trim();
+            sumString = sumString.replace('-', ' ').trim();
+            resultString[3] = " ";
+            resultString[4] = sumString;
+            resultString[5] = sumString;
+            resultString[6] = "2. Расход";
         }
         textToLog.append(sumString);
         textToLog.append(" ");
 
         //trim the summ from the logstring and log the rest of the message
-        textToLog.append(trimFirstWordFromMessage(sourceMessage));
+        String restString = trimFirstWordFromMessage(sourceMessage);
+        textToLog.append(restString);
+        resultString[1] = restString;
+
 
         List<Object> sentence = Arrays.asList(textToLog.toString().split(" "));
 
         try {
             Service.writeToSheet(sentence, sheetName);
+            Service.writeToSheet(Arrays.asList(resultString), "Test");
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
