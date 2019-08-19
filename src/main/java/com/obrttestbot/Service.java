@@ -130,7 +130,6 @@ public class Service {
         textToLog.append(restString);
         resultString[1] = restString;
 
-
         List<Object> sentence = Arrays.asList(textToLog.toString().split(" "));
 
         try {

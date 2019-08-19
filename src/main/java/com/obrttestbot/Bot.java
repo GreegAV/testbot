@@ -81,71 +81,63 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
 
-        if (message != null & message.hasText()) {
-            String firstWord;
-            if (update.getMessage().getText().indexOf(" ") > 0) {
-                firstWord = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
-            } else {
-                firstWord = update.getMessage().getText();
-            }
-            switch (firstWord) {
-                case "/time": {
-//                    long chat_id = update.getMessage().getChatId();
-                    SendMessage messg = new SendMessage()
-                            .setChatId(update.getMessage().getChatId())
-                            .setText(new Date().toString());
-                    try {
-                        execute(sendInlineKeyBoardMessage(update.getMessage().getChatId()));
-                        execute(messg); // Sending our message object to user
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    break;
+        if (update.hasMessage()) {
+            long chat_id = update.getMessage().getChatId();
+            if (message != null & message.hasText()) {
+                String firstWord;
+                if (update.getMessage().getText().indexOf(" ") > 0) {
+                    firstWord = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
+                } else {
+                    firstWord = update.getMessage().getText();
                 }
-                case "/budget": {
-                    try {
-                        execute(sendInlineKeyBoardMessage(update.getMessage().getChatId()));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
+                switch (firstWord) {
+                    case "/time": {
+
+                        SendMessage messg = new SendMessage()
+                                .setChatId(chat_id)
+                                .setText(new Date().toString());
+                        try {
+                            execute(messg); // Sending our message object to user
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                     }
-                    Service.logToBudget(update);
-                    break;
+                    case "/budget": {
+                        Service.logToBudget(update);
+                        Service.logToSheets(update);
+                        break;
+                    }
+                    default:
+                        try {
+                            System.out.println(Config.screenNumber);
+                            execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        Service.logToSheets(update);
+                        break;
                 }
-                default:
-                    try {
-                        execute(sendInlineKeyBoardMessage(update.getMessage().getChatId()));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    Service.logToSheets(update);
-                    break;
             }
-        } else {
-            if (!message.hasText()) {
-                //TODO обработка стикеров, фоточек и т.д.
+        } else if (update.hasCallbackQuery()) {
+            try {
+                String messageFromTheButton = update.getCallbackQuery().getData();
+                Long currentChatID = update.getCallbackQuery().getMessage().getChatId();
+
+                System.out.println(Config.screenNumber+messageFromTheButton);
+//                execute(new SendMessage().setText(
+//                        messageFromTheButton)
+//                        .setChatId(update.getCallbackQuery().getMessage().getChatId()));
+                execute(Keyboards.sendInlineKeyBoardMessage(currentChatID, Config.screenNumber));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
+
         }
     }
 
-    public static SendMessage sendInlineKeyBoardMessage(long chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
-        inlineKeyboardButton1.setText("Тык");
-        inlineKeyboardButton1.setCallbackData("Button \"Тык\" has been pressed");
-        inlineKeyboardButton2.setText("Тык2");
-        inlineKeyboardButton2.setCallbackData("Button \"Тык2\" has been pressed");
-        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-        keyboardButtonsRow1.add(inlineKeyboardButton1);
-        keyboardButtonsRow1.add(new InlineKeyboardButton().setText("Fi4a").setCallbackData("CallFi4a"));
-        keyboardButtonsRow2.add(inlineKeyboardButton2);
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(keyboardButtonsRow1);
-        rowList.add(keyboardButtonsRow2);
-        inlineKeyboardMarkup.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Пример").setReplyMarkup(inlineKeyboardMarkup);
-    }
+
+
 
     public void setButtons(SendMessage sendMessage) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();

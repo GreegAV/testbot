@@ -27,6 +27,7 @@ class Config {
     static String BOT_TOKEN;
     static String APPLICATION_NAME;
     static String SPREADSHEET_URL;
+    static int screenNumber=0;
 
     static void loadProperties() {
         Config config = Config.getInstance();
