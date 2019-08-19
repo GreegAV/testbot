@@ -8,10 +8,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Keyboards {
+
+    public static int getNewScreenNumber(String messageFromTheButton) {
+        switch (messageFromTheButton) {
+            case "Расходы":
+                return 1;
+            case "Доходы":
+                return 2;
+            case "На персонал":
+                return 11;
+            case "Хозяйственные":
+                return 12;
+            case "Коммуналка":
+                return 13;
+            case "Офис":
+                return 14;
+            case "Сервис":
+                return 15;
+            case "Маркетинг":
+                return 16;
+            case "Налоги":
+                return 17;
+        }
+        return 0;
+    }
+
     public static SendMessage sendInlineKeyBoardMessage(long chatId, int screenNumber) {
         switch (screenNumber) {
-            case 0: {
-                Config.screenNumber = 1;
+            case Config.WECOME_SCREEN: {
+
                 InlineKeyboardMarkup inlineKeyboardMarkup0 = new InlineKeyboardMarkup();
 
                 InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
@@ -33,8 +58,7 @@ public class Keyboards {
                 return new SendMessage().setChatId(chatId).setText("Выберите действие.").setReplyMarkup(inlineKeyboardMarkup0);
             }
 
-            case 1: {
-                Config.screenNumber = 11;
+            case Config.SPENTS_SCREEN: {
                 InlineKeyboardMarkup inlineKeyboardMarkup1 = new InlineKeyboardMarkup();
 
                 InlineKeyboardButton inlineKeyboardButton11 = new InlineKeyboardButton();
@@ -86,9 +110,9 @@ public class Keyboards {
                 return new SendMessage().setChatId(chatId).setText("Выберите категорию расходов.").setReplyMarkup(inlineKeyboardMarkup1);
             }
             default: {
-                break;
+                return new SendMessage().setChatId(chatId).setText("Категория "+String.valueOf(Config.screenNumber));
             }
         }
-        return null; //TODO ?!?!???!
+//        return null; //TODO ?!?!???!
     }
 }

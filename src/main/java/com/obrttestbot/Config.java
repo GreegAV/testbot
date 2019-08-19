@@ -29,6 +29,10 @@ class Config {
     static String SPREADSHEET_URL;
     static int screenNumber=0;
 
+    static final int WECOME_SCREEN=0;
+    static final int SPENTS_SCREEN=1;
+    static final int INCOME_SCREEN=2;
+
     static void loadProperties() {
         Config config = Config.getInstance();
 

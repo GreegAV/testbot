@@ -4,16 +4,17 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+
 
 public class Bot extends TelegramLongPollingBot {
     // По правильному, это надо было сделать отдельной веткой в гитхабе, но так сложилось :(
@@ -111,6 +112,9 @@ public class Bot extends TelegramLongPollingBot {
                     default:
                         try {
                             System.out.println(Config.screenNumber);
+                            if (Config.screenNumber > 0)
+                                System.out.println("default: " + update.getCallbackQuery().getData());
+//                            Config.screenNumber=getNewScreenNumber(update.getCallbackQuery().getData());
                             execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
@@ -123,8 +127,7 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 String messageFromTheButton = update.getCallbackQuery().getData();
                 Long currentChatID = update.getCallbackQuery().getMessage().getChatId();
-
-                System.out.println(Config.screenNumber+messageFromTheButton);
+                Config.screenNumber= Keyboards.getNewScreenNumber(messageFromTheButton);
 //                execute(new SendMessage().setText(
 //                        messageFromTheButton)
 //                        .setChatId(update.getCallbackQuery().getMessage().getChatId()));
