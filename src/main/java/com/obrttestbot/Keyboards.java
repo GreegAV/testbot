@@ -13,22 +13,84 @@ public class Keyboards {
         switch (messageFromTheButton) {
             case "Расходы":
                 return 1;
-            case "Доходы":
-                return 2;
+
             case "На персонал":
                 return 11;
+            case "Зарплата":
+                return 111;
+            case "Обучение":
+                return 112;
+
             case "Хозяйственные":
                 return 12;
+            case "Клининг":
+                return 121;
+            case "Ремонты":
+                return 122;
+            case "Хозтовары":
+                return 123;
+
             case "Коммуналка":
                 return 13;
+            case "Аренда":
+                return 131;
+            case "Электричество":
+                return 132;
+            case "Вода":
+                return 133;
+            case "Обслуживание":
+                return 134;
+
             case "Офис":
                 return 14;
+            case "Канцтовары":
+                return 141;
+            case "Связь":
+                return 142;
+
             case "Сервис":
                 return 15;
+            case "CRM":
+                return 151;
+            case "Энванто":
+                return 152;
+            case "Тильда":
+                return 153;
+
             case "Маркетинг":
                 return 16;
+            case "Instagram":
+                return 161;
+            case "Google":
+                return 162;
+            case "Facebook":
+                return 163;
+            case "Прочее":
+                return 164;
+
             case "Налоги":
                 return 17;
+            case "ЕСВ":
+                return 171;
+            case "НДФЛ":
+                return 172;
+            case "Военный сбор":
+                return 173;
+            case "Единый 3%-5%":
+                return 174;
+            case "НДС":
+                return 175;
+
+            case "Другие расходы":
+                return 10;
+
+            case "Доходы":
+                return 2;
+            case "Выручка":
+                return 21;
+            case "Прочие доходы":
+                return 20;
+
         }
         return 0;
     }
@@ -110,7 +172,7 @@ public class Keyboards {
                 return new SendMessage().setChatId(chatId).setText("Выберите категорию расходов.").setReplyMarkup(inlineKeyboardMarkup1);
             }
             default: {
-                return new SendMessage().setChatId(chatId).setText("Категория "+String.valueOf(Config.screenNumber));
+                return new SendMessage().setChatId(chatId).setText("Категория " + String.valueOf(Config.screenNumber));
             }
         }
 //        return null; //TODO ?!?!???!

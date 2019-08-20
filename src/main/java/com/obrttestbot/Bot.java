@@ -9,11 +9,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -84,7 +82,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.hasMessage()) {
             long chat_id = update.getMessage().getChatId();
-            if (message != null & message.hasText()) {
+            if (message != null && message.hasText()) {
                 String firstWord;
                 if (update.getMessage().getText().indexOf(" ") > 0) {
                     firstWord = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
@@ -119,7 +117,9 @@ public class Bot extends TelegramLongPollingBot {
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
-                        Service.logToSheets(update);
+
+                        if (update.getMessage().getText().indexOf(" ") > 0)
+                            Service.logToSheets(update);
                         break;
                 }
             }
@@ -127,7 +127,7 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 String messageFromTheButton = update.getCallbackQuery().getData();
                 Long currentChatID = update.getCallbackQuery().getMessage().getChatId();
-                Config.screenNumber= Keyboards.getNewScreenNumber(messageFromTheButton);
+                Config.screenNumber = Keyboards.getNewScreenNumber(messageFromTheButton);
 //                execute(new SendMessage().setText(
 //                        messageFromTheButton)
 //                        .setChatId(update.getCallbackQuery().getMessage().getChatId()));
@@ -138,8 +138,6 @@ public class Bot extends TelegramLongPollingBot {
 
         }
     }
-
-
 
 
     public void setButtons(SendMessage sendMessage) {
