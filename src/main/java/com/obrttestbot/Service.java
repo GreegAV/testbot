@@ -3,6 +3,7 @@ package com.obrttestbot;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
@@ -134,7 +135,7 @@ public class Service {
 
         try {
             Service.writeToSheet(sentence, sheetName);
-            Service.writeToSheet(Arrays.asList(resultString), "Test");
+            Service.writeToSheet(Arrays.asList(resultString), "ДДС");
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
@@ -161,4 +162,16 @@ public class Service {
         return string4Trim.substring(string4Trim.indexOf(" ") + 1);
     }
 
+    public static SendMessage getSumm(long chatId) {
+        int tempScreenNumber = Config.screenNumber;
+        Config.screenNumber = 0;
+        return new SendMessage().setChatId(chatId).setText("Тут будет реализован ввод суммы от экрана " + String.valueOf(tempScreenNumber));
+
+    }
+
+    public static void logToDDS(Update update) {
+        System.out.println("Logging to DDS");
+        Config.screenNumber=-1;
+
+    }
 }

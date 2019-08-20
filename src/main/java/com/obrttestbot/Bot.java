@@ -103,16 +103,18 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     }
                     case "/budget": {
-                        Service.logToBudget(update);
                         Service.logToSheets(update);
+                        Service.logToBudget(update);
                         break;
                     }
-                    default:
+                    default: {
+                        if (Config.screenNumber == -1) {
+                            Service.logToSheets(update); //TODO LOG SUMM TO DDS!!!!
+                            Config.screenNumber=0;
+                        }
                         try {
-                            System.out.println(Config.screenNumber);
                             if (Config.screenNumber > 0)
                                 System.out.println("default: " + update.getCallbackQuery().getData());
-//                            Config.screenNumber=getNewScreenNumber(update.getCallbackQuery().getData());
                             execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
@@ -121,17 +123,20 @@ public class Bot extends TelegramLongPollingBot {
                         if (update.getMessage().getText().indexOf(" ") > 0)
                             Service.logToSheets(update);
                         break;
+                    }
                 }
             }
-        } else if (update.hasCallbackQuery()) {
+        } else if (update.hasCallbackQuery()) { // обработка нажатий на кнопки
             try {
                 String messageFromTheButton = update.getCallbackQuery().getData();
-                Long currentChatID = update.getCallbackQuery().getMessage().getChatId();
                 Config.screenNumber = Keyboards.getNewScreenNumber(messageFromTheButton);
-//                execute(new SendMessage().setText(
-//                        messageFromTheButton)
-//                        .setChatId(update.getCallbackQuery().getMessage().getChatId()));
-                execute(Keyboards.sendInlineKeyBoardMessage(currentChatID, Config.screenNumber));
+                Long currentChatID = update.getCallbackQuery().getMessage().getChatId();
+                if (Config.screenNumber < 100) {
+                    execute(Keyboards.sendInlineKeyBoardMessage(currentChatID, Config.screenNumber));
+                } else {
+                    execute(Service.getSumm(currentChatID));
+                    Service.logToDDS(update);
+                }
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
