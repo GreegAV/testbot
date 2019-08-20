@@ -48,14 +48,6 @@ public class Keyboards {
             case "Связь":
                 return 142;
 
-            case "Сервис":
-                return 15;
-            case "CRM":
-                return 151;
-            case "Энванто":
-                return 152;
-            case "Тильда":
-                return 153;
 
             case "Маркетинг":
                 return 16;
@@ -65,8 +57,14 @@ public class Keyboards {
                 return 162;
             case "Facebook":
                 return 163;
-            case "Прочее":
+            case "CRM":
                 return 164;
+            case "Энванто":
+                return 165;
+            case "Тильда":
+                return 166;
+            case "Прочее":
+                return 167;
 
             case "Налоги":
                 return 17;
@@ -120,7 +118,7 @@ public class Keyboards {
                 return new SendMessage().setChatId(chatId).setText("Выберите действие.").setReplyMarkup(inlineKeyboardMarkup0);
             }
 
-            case Config.SPENTS_SCREEN: {
+            case Config.EXPENSES_SCREEN: {
                 InlineKeyboardMarkup inlineKeyboardMarkup1 = new InlineKeyboardMarkup();
 
                 InlineKeyboardButton inlineKeyboardButton11 = new InlineKeyboardButton();
