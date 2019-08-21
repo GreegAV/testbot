@@ -56,8 +56,12 @@ public class Keyboards {
             case Config.EXPENSES_COMMUNAL_ELECTRICITY:
             case Config.EXPENSES_COMMUNAL_WATER:
             case Config.EXPENSES_COMMUNAL_SERVICE:
+            case Config.EXPENSES_OFFICE_STATIONARY:
+            case Config.EXPENSES_OFFICE_CONNECTION:
+
             case Config.EXPENSES_MARKETING_GOOGLE:
             case Config.EXPENSES_MARKETING_FACEBOOK:
+            case Config.EXPENSES_MARKETING_INSTAGRAMM:
             case Config.EXPENSES_MARKETING_CRM:
             case Config.EXPENSES_MARKETING_ENVATO:
             case Config.EXPENSES_MARKETING_TILDA:
@@ -69,7 +73,7 @@ public class Keyboards {
             case Config.EXPENSES_TAXES_VAT:
             case Config.EXPENSES_DIFFERENT:
             case Config.INCOME_REVENUE:
-            case Config.INCOME_OTHERREVENUE: { // 210
+            case Config.INCOME_OTHERREVENUE: { // Entering summ
                 return Service.getSumm(chatId);
             }
 

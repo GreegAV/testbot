@@ -118,8 +118,8 @@ class Config {
         buttonsNumbers.put("Налоги", Config.EXPENSES_TAXES_SCREEN);
         buttonsNumbers.put("ЕСВ", Config.EXPENSES_TAXES_ESV);
         buttonsNumbers.put("НДФЛ", Config.EXPENSES_TAXES_NDFL);
-        buttonsNumbers.put("Военный сбор", Config.EXPENSES_TAXES_WAR);
-        buttonsNumbers.put("Единый 3%-5%", Config.EXPENSES_TAXES_EDIN);
+        buttonsNumbers.put("Военный налог", Config.EXPENSES_TAXES_WAR);
+        buttonsNumbers.put("Единый налог", Config.EXPENSES_TAXES_EDIN);
         buttonsNumbers.put("НДС", Config.EXPENSES_TAXES_VAT);
 
         buttonsNumbers.put("Другие расходы", Config.EXPENSES_DIFFERENT);
