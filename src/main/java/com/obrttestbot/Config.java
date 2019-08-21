@@ -65,10 +65,10 @@ class Config {
 
     static final int EXPENSES_TAXES_SCREEN = 17;
     static final int EXPENSES_TAXES_ESV = 171;
-    static final int EXPENSES_TAXES_NDFL = 172;
-    static final int EXPENSES_TAXES_WAR = 173;
+    static final int EXPENSES_TAXES_VAT = 172;
+    static final int EXPENSES_TAXES_NDFL = 173;
     static final int EXPENSES_TAXES_EDIN = 174;
-    static final int EXPENSES_TAXES_VAT = 175;
+    static final int EXPENSES_TAXES_WAR = 175;
 
     static final int EXPENSES_DIFFERENT = 10;
 
@@ -111,8 +111,8 @@ class Config {
         buttonsNumbers.put("Google", Config.EXPENSES_MARKETING_GOOGLE);
         buttonsNumbers.put("Facebook", Config.EXPENSES_MARKETING_FACEBOOK);
         buttonsNumbers.put("CRM", Config.EXPENSES_MARKETING_CRM);
-        buttonsNumbers.put("Энванто", Config.EXPENSES_MARKETING_ENVATO);
-        buttonsNumbers.put("Тильда", Config.EXPENSES_MARKETING_TILDA);
+        buttonsNumbers.put("Envato", Config.EXPENSES_MARKETING_ENVATO);
+        buttonsNumbers.put("Tilda", Config.EXPENSES_MARKETING_TILDA);
         buttonsNumbers.put("Прочее", Config.EXPENSES_MARKETING_OTHER);
 
         buttonsNumbers.put("Налоги", Config.EXPENSES_TAXES_SCREEN);
