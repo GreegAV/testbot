@@ -129,7 +129,7 @@ public class Bot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) { // обработка нажатий на кнопки
             try {
                 String messageFromTheButton = update.getCallbackQuery().getData();
-                Config.screenNumber = Keyboards.getNewScreenNumber(messageFromTheButton);
+                Config.screenNumber = Config.buttonsNumbers.get(messageFromTheButton);
                 Long currentChatID = update.getCallbackQuery().getMessage().getChatId();
                 if (Config.screenNumber < 100) {
                     execute(Keyboards.sendInlineKeyBoardMessage(currentChatID, Config.screenNumber));

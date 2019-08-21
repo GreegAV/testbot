@@ -163,9 +163,8 @@ public class Service {
     }
 
     public static SendMessage getSumm(long chatId) {
-        int tempScreenNumber = Config.screenNumber;
         Config.screenNumber = 0;
-        return new SendMessage().setChatId(chatId).setText("Тут будет реализован ввод суммы от экрана " + String.valueOf(tempScreenNumber));
+        return new SendMessage().setChatId(chatId).setText("Введите сумму " );
 
     }
 

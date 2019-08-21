@@ -9,90 +9,6 @@ import java.util.List;
 
 public class Keyboards {
 
-    public static int getNewScreenNumber(String messageFromTheButton) {
-        switch (messageFromTheButton) {
-            case "Расходы":
-                return Config.EXPENSES_SCREEN;
-
-            case "На персонал":
-                return Config.EXPENSES_PERSONAL_SCREEN;
-            case "Зарплата":
-                return Config.EXPENSES_PERSONAL_SALARY;
-            case "Обучение":
-                return Config.EXPENSES_PERSONAL_STUDY;
-
-            case "Хозяйственные":
-                return Config.EXPENSES_HOUSEHOLD_SCREEN;
-            case "Клининг":
-                return Config.EXPENSES_HOUSEHOLD_CLEANING;
-            case "Ремонты":
-                return Config.EXPENSES_HOUSEHOLD_REPAIR;
-            case "Хозтовары":
-                return Config.EXPENSES_HOUSEHOLD_GOODS;
-
-            case "Коммуналка":
-                return Config.EXPENSES_COMMUNAL_SCREEN;
-            case "Аренда":
-                return Config.EXPENSES_COMMUNAL_RENT;
-            case "Электричество":
-                return Config.EXPENSES_COMMUNAL_ELECTRICITY;
-            case "Вода":
-                return Config.EXPENSES_COMMUNAL_WATER;
-            case "Обслуживание":
-                return Config.EXPENSES_COMMUNAL_SERVICE;
-
-            case "Офис":
-                return Config.EXPENSES_OFFICE_SCREEN;
-            case "Канцтовары":
-                return Config.EXPENSES_OFFICE_STATIONARY;
-            case "Связь":
-                return Config.EXPENSES_OFFICE_CONNECTION;
-
-
-            case "Маркетинг":
-                return Config.EXPENSES_MARKETING_SCREEN;
-            case "Instagram":
-                return Config.EXPENSES_MARKETING_INSTAGRAMM;
-            case "Google":
-                return Config.EXPENSES_MARKETING_GOOGLE;
-            case "Facebook":
-                return Config.EXPENSES_MARKETING_FACEBOOK;
-            case "CRM":
-                return Config.EXPENSES_MARKETING_CRM;
-            case "Энванто":
-                return Config.EXPENSES_MARKETING_ENVATO;
-            case "Тильда":
-                return Config.EXPENSES_MARKETING_TILDA;
-            case "Прочее":
-                return Config.EXPENSES_MARKETING_OTHER;
-
-            case "Налоги":
-                return Config.EXPENSES_TAXES_SCREEN;
-            case "ЕСВ":
-                return Config.EXPENSES_TAXES_ESV;
-            case "НДФЛ":
-                return Config.EXPENSES_TAXES_NDFL;
-            case "Военный сбор":
-                return Config.EXPENSES_TAXES_WAR;
-            case "Единый 3%-5%":
-                return Config.EXPENSES_TAXES_EDIN;
-            case "НДС":
-                return Config.EXPENSES_TAXES_VAT;
-
-            case "Другие расходы":
-                return Config.EXPENSES_DIFFERENT;
-
-            case "Доходы":
-                return Config.INCOME_SCREEN;
-            case "Выручка от продаж":
-                return Config.INCOME_REVENUE;
-            case "Прочие доходы":
-                return Config.INCOME_OTHERREVENUE;
-
-        }
-        return 0;
-    }
-
     public static SendMessage sendInlineKeyBoardMessage(long chatId, int screenNumber) {
         switch (screenNumber) {
             case Config.WELCOME_SCREEN: {    // 0
@@ -107,10 +23,32 @@ public class Keyboards {
                 return generateListOfIncomeButtons(chatId);
             }
 
-            case Config.INCOME_REVENUE: { // 200
-                return Service.getSumm(chatId);
+            case Config.EXPENSES_PERSONAL_SCREEN: { // 11
+                return generateListOfPersonalButtons(chatId);
             }
 
+            case Config.EXPENSES_PERSONAL_SALARY:
+            case Config.EXPENSES_PERSONAL_STUDY:
+            case Config.EXPENSES_HOUSEHOLD_CLEANING:
+            case Config.EXPENSES_HOUSEHOLD_REPAIR:
+            case Config.EXPENSES_HOUSEHOLD_GOODS:
+            case Config.EXPENSES_COMMUNAL_RENT:
+            case Config.EXPENSES_COMMUNAL_ELECTRICITY:
+            case Config.EXPENSES_COMMUNAL_WATER:
+            case Config.EXPENSES_COMMUNAL_SERVICE:
+            case Config.EXPENSES_MARKETING_GOOGLE:
+            case Config.EXPENSES_MARKETING_FACEBOOK:
+            case Config.EXPENSES_MARKETING_CRM:
+            case Config.EXPENSES_MARKETING_ENVATO:
+            case Config.EXPENSES_MARKETING_TILDA:
+            case Config.EXPENSES_MARKETING_OTHER:
+            case Config.EXPENSES_TAXES_ESV:
+            case Config.EXPENSES_TAXES_NDFL:
+            case Config.EXPENSES_TAXES_WAR:
+            case Config.EXPENSES_TAXES_EDIN:
+            case Config.EXPENSES_TAXES_VAT:
+            case Config.EXPENSES_DIFFERENT:
+            case Config.INCOME_REVENUE:
             case Config.INCOME_OTHERREVENUE: { // 210
                 return Service.getSumm(chatId);
             }
@@ -120,6 +58,28 @@ public class Keyboards {
             }
         }
 //        return null; //TODO ?!?!???!
+    }
+
+    private static SendMessage generateListOfPersonalButtons(long chatId) {
+        InlineKeyboardMarkup inlineKeyboardMarkup0 = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
+        inlineKeyboardButton01.setText("Зарплата");
+        inlineKeyboardButton01.setCallbackData("Зарплата");
+        inlineKeyboardButton02.setText("Обучение");
+        inlineKeyboardButton02.setCallbackData("Обучение");
+
+        List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
+
+        keyboardButtonsRow01.add(inlineKeyboardButton01);
+        keyboardButtonsRow01.add(inlineKeyboardButton02);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow01);
+
+        inlineKeyboardMarkup0.setKeyboard(rowList);
+        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup0);
     }
 
     private static SendMessage generateListOfIncomeButtons(long chatId) {

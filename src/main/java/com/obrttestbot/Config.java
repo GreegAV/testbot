@@ -1,10 +1,13 @@
 package com.obrttestbot;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 class Config {
 
     private static final String BUNDLE_NAME = "config";
+    public static Map<String, Integer> buttonsNumbers = new HashMap<>();
     private static Config instance;
     private ResourceBundle resource;
 
@@ -81,6 +84,42 @@ class Config {
         BOT_TOKEN = config.getProperty("botToken");
         APPLICATION_NAME = config.getProperty("appName");
         SPREADSHEET_URL = config.getProperty("sheetsURL");
+
+        buttonsNumbers.put("Расходы", Config.EXPENSES_SCREEN);
+        buttonsNumbers.put("На персонал", Config.EXPENSES_PERSONAL_SCREEN);
+        buttonsNumbers.put("Зарплата", Config.EXPENSES_PERSONAL_SALARY);
+        buttonsNumbers.put("Обучение", Config.EXPENSES_PERSONAL_STUDY);
+        buttonsNumbers.put("Хозяйственные", Config.EXPENSES_HOUSEHOLD_SCREEN);
+        buttonsNumbers.put("Клининг", Config.EXPENSES_HOUSEHOLD_CLEANING);
+        buttonsNumbers.put("Ремонты", Config.EXPENSES_HOUSEHOLD_REPAIR);
+        buttonsNumbers.put("Хозтовары", Config.EXPENSES_HOUSEHOLD_GOODS);
+        buttonsNumbers.put("Коммуналка", Config.EXPENSES_COMMUNAL_SCREEN);
+        buttonsNumbers.put("Аренда", Config.EXPENSES_COMMUNAL_RENT);
+        buttonsNumbers.put("Электричество", Config.EXPENSES_COMMUNAL_ELECTRICITY);
+        buttonsNumbers.put("Вода", Config.EXPENSES_COMMUNAL_WATER);
+        buttonsNumbers.put("Обслуживание", Config.EXPENSES_COMMUNAL_SERVICE);
+        buttonsNumbers.put("Офис", Config.EXPENSES_OFFICE_SCREEN);
+        buttonsNumbers.put("Канцтовары", Config.EXPENSES_OFFICE_STATIONARY);
+        buttonsNumbers.put("Связь", Config.EXPENSES_OFFICE_CONNECTION);
+        buttonsNumbers.put("Маркетинг", Config.EXPENSES_MARKETING_SCREEN);
+        buttonsNumbers.put("Instagram", Config.EXPENSES_MARKETING_INSTAGRAMM);
+        buttonsNumbers.put("Google", Config.EXPENSES_MARKETING_GOOGLE);
+        buttonsNumbers.put("Facebook", Config.EXPENSES_MARKETING_FACEBOOK);
+        buttonsNumbers.put("CRM", Config.EXPENSES_MARKETING_CRM);
+        buttonsNumbers.put("Энванто", Config.EXPENSES_MARKETING_ENVATO);
+        buttonsNumbers.put("Тильда", Config.EXPENSES_MARKETING_TILDA);
+        buttonsNumbers.put("Прочее", Config.EXPENSES_MARKETING_OTHER);
+        buttonsNumbers.put("Налоги", Config.EXPENSES_TAXES_SCREEN);
+        buttonsNumbers.put("ЕСВ", Config.EXPENSES_TAXES_ESV);
+        buttonsNumbers.put("НДФЛ", Config.EXPENSES_TAXES_NDFL);
+        buttonsNumbers.put("Военный сбор", Config.EXPENSES_TAXES_WAR);
+        buttonsNumbers.put("Единый 3%-5%", Config.EXPENSES_TAXES_EDIN);
+        buttonsNumbers.put("НДС", Config.EXPENSES_TAXES_VAT);
+        buttonsNumbers.put("Другие расходы", Config.EXPENSES_DIFFERENT);
+        buttonsNumbers.put("Доходы", Config.INCOME_SCREEN);
+        buttonsNumbers.put("Выручка от продаж", Config.INCOME_REVENUE);
+        buttonsNumbers.put("Прочие доходы", Config.INCOME_OTHERREVENUE);
+
 
         System.out.println("Config for " + BOT_NAME + " loaded");
     }
