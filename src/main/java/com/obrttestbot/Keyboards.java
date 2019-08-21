@@ -77,7 +77,6 @@ public class Keyboards {
                 return new SendMessage().setChatId(chatId).setText("Передайте это число разработчику: " + String.valueOf(Config.screenNumber));
             }
         }
-//        return null; //TODO ?!?!???!
     }
 
     private static SendMessage generateListOfCommunalButtons(long chatId) {
