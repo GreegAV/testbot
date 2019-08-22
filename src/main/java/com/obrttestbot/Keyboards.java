@@ -58,7 +58,6 @@ public class Keyboards {
             case Config.EXPENSES_COMMUNAL_SERVICE:
             case Config.EXPENSES_OFFICE_STATIONARY:
             case Config.EXPENSES_OFFICE_CONNECTION:
-
             case Config.EXPENSES_MARKETING_GOOGLE:
             case Config.EXPENSES_MARKETING_FACEBOOK:
             case Config.EXPENSES_MARKETING_INSTAGRAMM:
@@ -74,7 +73,7 @@ public class Keyboards {
             case Config.EXPENSES_DIFFERENT:
             case Config.INCOME_REVENUE:
             case Config.INCOME_OTHERREVENUE: { // Entering summ
-                return Service.getSumm(chatId);
+                return Service.askForSumm(screenNumber, chatId);
             }
 
             default: {
@@ -257,7 +256,7 @@ public class Keyboards {
         InlineKeyboardButton inlineKeyboardButton12 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton13 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton14 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton15 = new InlineKeyboardButton();
+//        InlineKeyboardButton inlineKeyboardButton15 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton16 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton17 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton18 = new InlineKeyboardButton();

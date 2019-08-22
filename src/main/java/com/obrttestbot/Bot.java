@@ -109,11 +109,13 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     default: {
                         if (Config.screenNumber == -1) {
+                            Service.logToDDS(update);
+                            jokesAboutSumm(update);
                             Service.logToSheets(update); //TODO LOG SUMM TO DDS!!!!
-                            Config.screenNumber=0;
+                            Config.screenNumber = 0;
                         }
                         try {
-                            if (Config.screenNumber > 0)
+                            if (update.hasCallbackQuery() && Config.screenNumber > 0)
                                 System.out.println("default: " + update.getCallbackQuery().getData());
                             execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
                         } catch (TelegramApiException e) {
@@ -134,13 +136,36 @@ public class Bot extends TelegramLongPollingBot {
                 if (Config.screenNumber < 100) {
                     execute(Keyboards.sendInlineKeyBoardMessage(currentChatID, Config.screenNumber));
                 } else {
-                    execute(Service.getSumm(currentChatID));
-                    Service.logToDDS(update);
+                    execute(Service.askForSumm(Config.screenNumber, currentChatID));
                 }
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    private void jokesAboutSumm(Update update) {
+        double incomeSumm = Double.parseDouble(update.getMessage().getText());
+        String greetText = "";
+        if (Config.lastScreen == Config.INCOME_REVENUE | Config.lastScreen == Config.INCOME_OTHERREVENUE) {
+            if (incomeSumm > 10000) {
+                greetText = "Отлично сработано. Всегда бы так!";
+            } else
+                greetText = "Маловато будет...";
+        } else {
+            if (incomeSumm > 5000) {
+                greetText = "Сплошные убытки! Мы так самолёт не купим!";
+            } else
+                greetText = "К сожалению, иногда, расходы неизбежны";
+        }
+        SendMessage messg = new SendMessage()
+                .setChatId(update.getMessage().getChatId())
+                .setText(greetText);
+        try {
+            execute(messg); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 

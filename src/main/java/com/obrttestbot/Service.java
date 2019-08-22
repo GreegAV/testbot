@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Service {
     private static Sheets sheetsService;
@@ -162,15 +163,20 @@ public class Service {
         return string4Trim.substring(string4Trim.indexOf(" ") + 1);
     }
 
-    public static SendMessage getSumm(long chatId) {
-        Config.screenNumber = 0;
-        return new SendMessage().setChatId(chatId).setText("Введите сумму " );
-
+    public static SendMessage askForSumm(int screenNumber, long chatId) {
+        Config.screenNumber = -1;
+        Config.lastScreen = screenNumber;
+        String category = "";
+        for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
+            if (entry.getValue().equals(screenNumber)) {
+                category = entry.getKey();
+            }
+        }
+        return new SendMessage().setChatId(chatId).setText("Введите сумму для категории: " + category);
     }
 
     public static void logToDDS(Update update) {
         System.out.println("Logging to DDS");
-        Config.screenNumber=-1;
 
     }
 }

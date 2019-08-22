@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 class Config {
 
     private static final String BUNDLE_NAME = "config";
-    public static Map<String, Integer> buttonsNumbers = new HashMap<>();
+    static Map<String, Integer> buttonsNumbers = new HashMap<>();
     private static Config instance;
     private ResourceBundle resource;
 
@@ -31,6 +31,7 @@ class Config {
     static String APPLICATION_NAME;
     static String SPREADSHEET_URL;
     static int screenNumber = 0;
+    static int lastScreen = 0;
 
     static final int WELCOME_SCREEN = 0;
 
