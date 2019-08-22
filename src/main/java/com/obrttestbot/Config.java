@@ -129,7 +129,6 @@ class Config {
         buttonsNumbers.put("Выручка от продаж", Config.INCOME_REVENUE);
         buttonsNumbers.put("Прочие доходы", Config.INCOME_OTHERREVENUE);
 
-
         System.out.println("Config for " + BOT_NAME + " loaded");
     }
 }

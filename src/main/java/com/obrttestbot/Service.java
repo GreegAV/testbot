@@ -31,24 +31,24 @@ public class Service {
                 .execute();
     }
 
-    public static void readFromSheet(Sheets sheetsService, String sheetName, String startOfTheRange, String endOfTheRange) throws IOException {
-        String range = sheetName + "!" + startOfTheRange + ":" + endOfTheRange;
-
-        ValueRange response = sheetsService.spreadsheets().values()
-                .get(Config.SPREADSHEET_URL, range)
-                .execute();
-
-        List<List<Object>> values = response.getValues();
-
-        if (values == null || values.isEmpty()) {
-            System.out.println("No data found.");
-        } else {
-            System.out.println(values.get(0).size());
-            for (List<Object> row : values) {
-                System.out.printf("%s, %s, %s\n", row.get(0), row.get(1), row.get(2));
-            }
-        }
-    }
+//    public static void readFromSheet(Sheets sheetsService, String sheetName, String startOfTheRange, String endOfTheRange) throws IOException {
+//        String range = sheetName + "!" + startOfTheRange + ":" + endOfTheRange;
+//
+//        ValueRange response = sheetsService.spreadsheets().values()
+//                .get(Config.SPREADSHEET_URL, range)
+//                .execute();
+//
+//        List<List<Object>> values = response.getValues();
+//
+//        if (values == null || values.isEmpty()) {
+//            System.out.println("No data found.");
+//        } else {
+//            System.out.println(values.get(0).size());
+//            for (List<Object> row : values) {
+//                System.out.printf("%s, %s, %s\n", row.get(0), row.get(1), row.get(2));
+//            }
+//        }
+//    }
 
     static void logToSheets(Update update) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
@@ -91,35 +91,34 @@ public class Service {
         resultString[0] = date;
 
         //add category of summ
-
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
             if (entry.getValue().equals(Config.lastScreen)) {
                 resultString[1] = entry.getKey();
             }
         }
+
+        //add subcategory of summ
         if (Config.lastScreen >= 100) {
             for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
                 if (entry.getValue().equals(Config.lastScreen / 10)) {
                     resultString[7] = entry.getKey();
-                    System.out.println(resultString[7]);
                 }
             }
         } else {
             for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
                 if (entry.getValue().equals(Config.lastScreen)) {
                     resultString[7] = entry.getKey();
-                    System.out.println(resultString[7]);
                 }
             }
         }
 
         //add name of author of operation
-        String kontragent = formatUserName(update);
-        resultString[2] = kontragent;
+        resultString[2] = formatUserName(update);
 
         // cutting out the summ
         double incomeSumm = Math.abs(Double.parseDouble(update.getMessage().getText()));
 
+        // add type of summ
         if (Config.lastScreen < 100) {
             resultString[3] = String.valueOf(incomeSumm);
             resultString[5] = String.valueOf(incomeSumm);
@@ -142,10 +141,10 @@ public class Service {
     static void logToBudget(Update update) {
         //   0      1           2          3       4      5        6          7
         // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
-        String[] resultString = new String[8];
-        for (int i = 0; i < 8; i++) {
-            resultString[i] = " ";
-        }
+//        String[] resultString = new String[8];
+//        for (int i = 0; i < 8; i++) {
+//            resultString[i] = " ";
+//        }
 
         String sheetName = "Расход";
 
@@ -156,13 +155,13 @@ public class Service {
         StringBuilder textToLog = new StringBuilder();
 
         //add date of operation
-        resultString[0] = date;
+//        resultString[0] = date;
         textToLog.append(date);
         textToLog.append(" ");
 
         //add name of author of operation
         String kontragent = formatUserName(update);
-        resultString[2] = kontragent;
+//        resultString[2] = kontragent;
         textToLog.append(kontragent);
         textToLog.append(" ");
 
@@ -176,16 +175,16 @@ public class Service {
         double summa = Double.parseDouble(sumString.replace(',', '.'));
         if (summa >= 0) {
             sheetName = "Приход"; //by default - Расход
-            resultString[3] = sumString;
-            resultString[4] = " ";
-            resultString[5] = sumString;
-            resultString[6] = "1. Доход";
+//            resultString[3] = sumString;
+//            resultString[4] = " ";
+//            resultString[5] = sumString;
+//            resultString[6] = "1. Доход";
         } else {
             sumString = sumString.replace('-', ' ').trim();
-            resultString[3] = " ";
-            resultString[4] = sumString;
-            resultString[5] = sumString;
-            resultString[6] = "2. Расход";
+//            resultString[3] = " ";
+//            resultString[4] = sumString;
+//            resultString[5] = sumString;
+//            resultString[6] = "2. Расход";
         }
         textToLog.append(sumString);
         textToLog.append(" ");
@@ -193,13 +192,13 @@ public class Service {
         //trim the summ from the logstring and log the rest of the message
         String restString = trimFirstWordFromMessage(sourceMessage);
         textToLog.append(restString);
-        resultString[1] = restString;
+//        resultString[1] = restString;
 
         List<Object> sentence = Arrays.asList(textToLog.toString().split(" "));
 
         try {
             Service.writeToSheet(sentence, sheetName);
-            Service.writeToSheet(Arrays.asList(resultString), "ДДС");
+//            Service.writeToSheet(Arrays.asList(resultString), "ДДС");
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
@@ -238,8 +237,4 @@ public class Service {
         return new SendMessage().setChatId(chatId).setText("Введите сумму для категории: " + category);
     }
 
-//    public static void logToDDS(Update update) {
-//        System.out.println("Logging to DDS");
-//
-//    }
 }

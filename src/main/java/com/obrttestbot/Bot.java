@@ -109,6 +109,17 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     default: {
                         if (Config.screenNumber == -1) {
+//                            while (true) {
+//                                try {
+//                                    Double.parseDouble(update.getMessage().getText());
+//                                    break;
+//                                } catch (NumberFormatException nfe) {
+//                                    nfe.printStackTrace();
+//                                    System.out.println("FUCK");
+//                                    Service.askForSumm(Config.lastScreen, update.getMessage().getChatId());
+//                                }
+//                            }
+
                             Service.logToDDS(update);
                             jokesAboutSumm(update);
                             Config.screenNumber = 0;
