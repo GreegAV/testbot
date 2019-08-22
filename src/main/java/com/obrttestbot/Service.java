@@ -116,7 +116,7 @@ public class Service {
         resultString[2] = formatUserName(update);
 
         // cutting out the summ
-        double incomeSumm = Math.abs(Double.parseDouble(update.getMessage().getText()));
+        double incomeSumm = Math.abs(Double.parseDouble(update.getMessage().getText().replace(',','.')));
 
         // add type of summ
         if (Config.lastScreen < 100) {

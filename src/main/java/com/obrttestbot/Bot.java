@@ -156,7 +156,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void jokesAboutSumm(Update update) {
-        double incomeSumm = Double.parseDouble(update.getMessage().getText());
+        double incomeSumm = Double.parseDouble(update.getMessage().getText().replace(',', '.'));
         String greetText = "";
         if (Config.lastScreen == Config.INCOME_REVENUE | Config.lastScreen == Config.INCOME_OTHERREVENUE) {
             if (incomeSumm > 10000) {
