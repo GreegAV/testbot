@@ -74,8 +74,8 @@ class Config {
     static final int EXPENSES_DIFFERENT = 10;
 
     static final int INCOME_SCREEN = 2;
-    static final int INCOME_REVENUE = 200;
-    static final int INCOME_OTHERREVENUE = 210;
+    static final int INCOME_REVENUE = 20;
+    static final int INCOME_OTHERREVENUE = 21;
 
 
     static void loadProperties() {

@@ -76,6 +76,69 @@ public class Service {
         }
     }
 
+    static void logToDDS(Update update) {
+        //   0      1           2          3       4      5        6          7
+        // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
+        String[] resultString = new String[8];
+        for (int i = 0; i < 8; i++) {
+            resultString[i] = " ";
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
+
+        //add date of operation
+        resultString[0] = date;
+
+        //add category of summ
+
+        for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
+            if (entry.getValue().equals(Config.lastScreen)) {
+                resultString[1] = entry.getKey();
+            }
+        }
+        if (Config.lastScreen >= 100) {
+            for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
+                if (entry.getValue().equals(Config.lastScreen / 10)) {
+                    resultString[7] = entry.getKey();
+                    System.out.println(resultString[7]);
+                }
+            }
+        } else {
+            for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
+                if (entry.getValue().equals(Config.lastScreen)) {
+                    resultString[7] = entry.getKey();
+                    System.out.println(resultString[7]);
+                }
+            }
+        }
+
+        //add name of author of operation
+        String kontragent = formatUserName(update);
+        resultString[2] = kontragent;
+
+        // cutting out the summ
+        double incomeSumm = Math.abs(Double.parseDouble(update.getMessage().getText()));
+
+        if (Config.lastScreen < 100) {
+            resultString[3] = String.valueOf(incomeSumm);
+            resultString[5] = String.valueOf(incomeSumm);
+            resultString[6] = "1. Доход";
+        } else {
+            resultString[4] = String.valueOf(incomeSumm);
+            resultString[5] = String.valueOf((-1.0) * incomeSumm);
+            resultString[6] = "2. Расход";
+        }
+
+        try {
+            Service.writeToSheet(Arrays.asList(resultString), "ДДС");
+        } catch (IOException |
+                GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     static void logToBudget(Update update) {
         //   0      1           2          3       4      5        6          7
         // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
@@ -175,8 +238,8 @@ public class Service {
         return new SendMessage().setChatId(chatId).setText("Введите сумму для категории: " + category);
     }
 
-    public static void logToDDS(Update update) {
-        System.out.println("Logging to DDS");
-
-    }
+//    public static void logToDDS(Update update) {
+//        System.out.println("Logging to DDS");
+//
+//    }
 }

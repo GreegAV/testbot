@@ -111,7 +111,6 @@ public class Bot extends TelegramLongPollingBot {
                         if (Config.screenNumber == -1) {
                             Service.logToDDS(update);
                             jokesAboutSumm(update);
-                            Service.logToSheets(update); //TODO LOG SUMM TO DDS!!!!
                             Config.screenNumber = 0;
                         }
                         try {
