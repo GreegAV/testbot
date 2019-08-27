@@ -108,26 +108,30 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     }
                     default: {
-                        if (Config.screenNumber == -1) {
-//                            while (true) {
-//                                try {
-//                                    Double.parseDouble(update.getMessage().getText());
-//                                    break;
-//                                } catch (NumberFormatException nfe) {
-//                                    nfe.printStackTrace();
-//                                    System.out.println("FUCK");
-//                                    Service.askForSumm(Config.lastScreen, update.getMessage().getChatId());
-//                                }
-//                            }
+                        if (Config.screenNumber == -1 & Config.enteringSumm) {
 
-                            Service.logToDDS(update);
-                            jokesAboutSumm(update);
-                            Config.screenNumber = 0;
+                            String entered = update.getMessage().getText();
+                            if (!isNumeric(entered)) {
+                                try {
+                                    Config.screenNumber = Config.lastScreen;
+                                    Config.enteringSumm = true;
+                                    execute(Service.askForSumm(Config.screenNumber, update.getMessage().getChatId()));
+                                } catch (TelegramApiException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Service.logToDDS(update);
+                                jokesAboutSumm(update);
+                                Config.screenNumber = 0;
+                                Config.enteringSumm = false;
+                            }
                         }
                         try {
-                            if (update.hasCallbackQuery() && Config.screenNumber > 0)
+                            if (update.hasCallbackQuery() & Config.screenNumber > 0)
                                 System.out.println("default: " + update.getCallbackQuery().getData());
-                            execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
+                            if (!Config.enteringSumm)
+                                execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
+
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -143,7 +147,7 @@ public class Bot extends TelegramLongPollingBot {
                 String messageFromTheButton = update.getCallbackQuery().getData();
                 Config.screenNumber = Config.buttonsNumbers.get(messageFromTheButton);
                 Long currentChatID = update.getCallbackQuery().getMessage().getChatId();
-                if (Config.screenNumber < 100) {
+                if (Config.screenNumber < 100 & Config.screenNumber > 0) {
                     execute(Keyboards.sendInlineKeyBoardMessage(currentChatID, Config.screenNumber));
                 } else {
                     execute(Service.askForSumm(Config.screenNumber, currentChatID));
@@ -153,6 +157,12 @@ public class Bot extends TelegramLongPollingBot {
             }
 
         }
+    }
+
+    private static boolean isNumeric(String str) {
+        // TODO implement parsing of decimal numbers.
+
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
 
     private void jokesAboutSumm(Update update) {

@@ -77,7 +77,9 @@ public class Keyboards {
             }
 
             default: {
-                return new SendMessage().setChatId(chatId).setText("Передайте это число разработчику: " + String.valueOf(Config.screenNumber));
+                return new SendMessage()
+                        .setChatId(chatId)
+                        .setText("Передайте это число разработчику: " + String.valueOf(Config.screenNumber));
             }
         }
     }

@@ -33,6 +33,8 @@ class Config {
     static int screenNumber = 0;
     static int lastScreen = 0;
 
+    static boolean enteringSumm=false;
+
     static final int WELCOME_SCREEN = 0;
 
     static final int EXPENSES_SCREEN = 1;

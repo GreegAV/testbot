@@ -75,6 +75,7 @@ public class Service {
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
             if (entry.getValue().equals(Config.lastScreen)) {
                 resultString[1] = entry.getKey();
+                break;
             }
         }
 
@@ -83,12 +84,14 @@ public class Service {
             for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
                 if (entry.getValue().equals(Config.lastScreen / 10)) {
                     resultString[7] = entry.getKey();
+                    break;
                 }
             }
         } else {
             for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
                 if (entry.getValue().equals(Config.lastScreen)) {
                     resultString[7] = entry.getKey();
+                    break;
                 }
             }
         }
@@ -209,10 +212,12 @@ public class Service {
     public static SendMessage askForSumm(int screenNumber, long chatId) {
         Config.screenNumber = -1;
         Config.lastScreen = screenNumber;
+        Config.enteringSumm=true;
         String category = "";
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
             if (entry.getValue().equals(screenNumber)) {
                 category = entry.getKey();
+                break;
             }
         }
         return new SendMessage().setChatId(chatId).setText("Введите сумму для категории: " + category);
