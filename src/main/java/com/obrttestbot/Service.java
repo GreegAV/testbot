@@ -100,7 +100,9 @@ public class Service {
         resultString[2] = formatUserName(update);
 
         // cutting out the summ
-        double incomeSumm = Math.abs(Double.parseDouble(update.getMessage().getText().replace(',', '.')));
+        String inputSumm=update.getMessage().getText().replace(',', '.');
+        inputSumm=inputSumm.replace(" ", "");
+        double incomeSumm = Math.abs(Double.parseDouble(inputSumm));
 
         // add type of summ
         if (Config.lastScreen < 100) {
@@ -124,6 +126,8 @@ public class Service {
 
     static boolean isNumeric(String str) {
         String tmp = str.replace(',', '.');
+        tmp = tmp.replace(" ", "");
+
         if (tmp.indexOf('.') != tmp.lastIndexOf('.'))
             return false;
         return tmp.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
