@@ -100,7 +100,7 @@ public class Service {
         resultString[2] = formatUserName(update);
 
         // cutting out the summ
-        double incomeSumm = Math.abs(Double.parseDouble(update.getMessage().getText().replace(',','.')));
+        double incomeSumm = Math.abs(Double.parseDouble(update.getMessage().getText().replace(',', '.')));
 
         // add type of summ
         if (Config.lastScreen < 100) {
@@ -120,6 +120,13 @@ public class Service {
             e.printStackTrace();
         }
 
+    }
+
+    static boolean isNumeric(String str) {
+        String tmp = str.replace(',', '.');
+        if (tmp.indexOf('.') != tmp.lastIndexOf('.'))
+            return false;
+        return tmp.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
 
     static void logToBudget(Update update) {
@@ -212,7 +219,7 @@ public class Service {
     public static SendMessage askForSumm(int screenNumber, long chatId) {
         Config.screenNumber = -1;
         Config.lastScreen = screenNumber;
-        Config.enteringSumm=true;
+        Config.enteringSumm = true;
         String category = "";
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
             if (entry.getValue().equals(screenNumber)) {

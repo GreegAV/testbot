@@ -109,9 +109,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     default: {
                         if (Config.screenNumber == -1 & Config.enteringSumm) {
-
-                            String entered = update.getMessage().getText();
-                            if (!isNumeric(entered)) {
+                            if (!Service.isNumeric(update.getMessage().getText())) {
                                 try {
                                     Config.screenNumber = Config.lastScreen;
                                     Config.enteringSumm = true;
@@ -158,16 +156,10 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private static boolean isNumeric(String str) {
-        String tmp = str.replace(',', '.');
-        if (tmp.indexOf('.') != tmp.lastIndexOf('.'))
-            return false;
-        return tmp.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
-    }
 
     private void jokesAboutSumm(Update update) {
         double incomeSumm = Double.parseDouble(update.getMessage().getText().replace(',', '.'));
-        String greetText = "";
+        String greetText;
         if (Config.lastScreen == Config.INCOME_REVENUE | Config.lastScreen == Config.INCOME_OTHERREVENUE) {
             if (incomeSumm > 10000) {
                 greetText = "Отлично сработано. Всегда бы так!";
