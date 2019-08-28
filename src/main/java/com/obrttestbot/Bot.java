@@ -127,11 +127,10 @@ public class Bot extends TelegramLongPollingBot {
                             }
                         }
                         try {
-                            if (update.hasCallbackQuery() & Config.screenNumber > 0)
-                                System.out.println("default: " + update.getCallbackQuery().getData());
+//                            if (update.hasCallbackQuery() & Config.screenNumber > 0)
+//                                System.out.println("default: " + update.getCallbackQuery().getData());
                             if (!Config.enteringSumm)
                                 execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
-
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -160,9 +159,10 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private static boolean isNumeric(String str) {
-        // TODO implement parsing of decimal numbers.
-
-        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+        String tmp = str.replace(',', '.');
+        if (tmp.indexOf('.') != tmp.lastIndexOf('.'))
+            return false;
+        return tmp.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
 
     private void jokesAboutSumm(Update update) {
