@@ -103,8 +103,12 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     }
                     case "/budget": {
-                        Service.logToSheets(update);
-                        Service.logToBudget(update);
+                        try {
+                            if (!Config.enteringSumm)
+                                execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     }
                     default: {
@@ -124,16 +128,7 @@ public class Bot extends TelegramLongPollingBot {
                                 Config.enteringSumm = false;
                             }
                         }
-                        try {
-//                            if (update.hasCallbackQuery() & Config.screenNumber > 0)
-//                                System.out.println("default: " + update.getCallbackQuery().getData());
-                            if (!Config.enteringSumm)
-                                execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (update.getMessage().getText().indexOf(" ") > 0)
+//                        if (update.getMessage().getText().indexOf(" ") > 0)
                             Service.logToSheets(update);
                         break;
                     }
