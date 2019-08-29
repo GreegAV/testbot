@@ -72,7 +72,7 @@ public class Bot extends TelegramLongPollingBot {
 //            }
 //        }
 //        ///////////////////// Finally log to sheets
-//        logToSheets(update);
+//        logToGeneral(update);
 //
 //    }
 
@@ -126,10 +126,13 @@ public class Bot extends TelegramLongPollingBot {
                                 jokesAboutSumm(update);
                                 Config.screenNumber = 0;
                                 Config.enteringSumm = false;
+                                Config.fillingBudget = false;
+                                break;
                             }
                         }
 //                        if (update.getMessage().getText().indexOf(" ") > 0)
-                            Service.logToSheets(update);
+                        if (!Config.fillingBudget)
+                            Service.logToGeneral(update);
                         break;
                     }
                 }
@@ -150,7 +153,6 @@ public class Bot extends TelegramLongPollingBot {
 
         }
     }
-
 
     private void jokesAboutSumm(Update update) {
         double incomeSumm = Double.parseDouble(update.getMessage().getText().replace(',', '.'));

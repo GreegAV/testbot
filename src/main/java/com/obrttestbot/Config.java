@@ -34,6 +34,7 @@ class Config {
     static int lastScreen = 0;
 
     static boolean enteringSumm=false;
+    static boolean fillingBudget=false;
 
     static final int WELCOME_SCREEN = 0;
 

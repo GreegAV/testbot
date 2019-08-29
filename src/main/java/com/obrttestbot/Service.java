@@ -31,27 +31,27 @@ public class Service {
                 .execute();
     }
 
-    static void logToSheets(Update update) {
+    static void logToGeneral(Update update) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
 
         long userID = update.getMessage().getChatId();
-        String sheetName = "General";
-        String userName = "";
+//        String sheetName = "General";
+//        String userName = "";
         String textFromBot = update.getMessage().getText();
-        boolean isCommand = textFromBot.charAt(0) == '/';
-        if (isCommand) {
-            sheetName = "Test";
-            String command = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
-            textFromBot = trimFirstWordFromMessage(textFromBot);
-        } else {
-            textFromBot = date + " " + formatUserName(update) + " " + textFromBot;
-        }
+//        boolean isCommand = textFromBot.charAt(0) == '/';
+//        if (isCommand) {
+//            sheetName = "Test";
+//            String command = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
+//            textFromBot = trimFirstWordFromMessage(textFromBot);
+//        } else {
+        textFromBot = date + " " + formatUserName(update) + " " + textFromBot;
+//        }
 
         List<Object> sentence = Arrays.asList(textFromBot.split(" "));
 
         try {
-            Service.writeToSheet(sentence, sheetName);
+            Service.writeToSheet(sentence, "General");
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
@@ -100,8 +100,8 @@ public class Service {
         resultString[2] = formatUserName(update);
 
         // cutting out the summ
-        String inputSumm=update.getMessage().getText().replace(',', '.');
-        inputSumm=inputSumm.replace(" ", "");
+        String inputSumm = update.getMessage().getText().replace(',', '.');
+        inputSumm = inputSumm.replace(" ", "");
         double incomeSumm = Math.abs(Double.parseDouble(inputSumm));
 
         // add type of summ
@@ -224,6 +224,7 @@ public class Service {
         Config.screenNumber = -1;
         Config.lastScreen = screenNumber;
         Config.enteringSumm = true;
+        Config.fillingBudget = true;
         String category = "";
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
             if (entry.getValue().equals(screenNumber)) {
