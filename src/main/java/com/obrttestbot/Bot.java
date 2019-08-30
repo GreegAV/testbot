@@ -82,6 +82,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.hasMessage()) {
             long chat_id = update.getMessage().getChatId();
+            long user_id = update.getMessage().getFrom().getId();
             if (message != null && message.hasText()) {
                 String firstWord;
                 if (update.getMessage().getText().indexOf(" ") > 0) {
@@ -93,7 +94,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "/time": {
 
                         SendMessage messg = new SendMessage()
-                                .setChatId(chat_id)
+                                .setChatId(user_id)
                                 .setText(new Date().toString());
                         try {
                             execute(messg); // Sending our message object to user
@@ -102,11 +103,24 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     }
-                    case "/budget": {
+                    case "/budget":
+                    case "/budget@OBRTTestBot": {
                         try {
                             if (!Config.enteringSumm)
-                                execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
+                                execute(Keyboards.sendInlineKeyBoardMessage(user_id, Config.screenNumber));
                         } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case "/ident": {
+                        System.out.println(update);
+                        try {
+                            SendMessage msg = new SendMessage()
+                                    .setChatId(user_id)
+                                    .setText(update.toString());
+                            execute(msg);
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
@@ -133,6 +147,14 @@ public class Bot extends TelegramLongPollingBot {
 //                        if (update.getMessage().getText().indexOf(" ") > 0)
                         if (!Config.fillingBudget)
                             Service.logToGeneral(update);
+                        else {
+                            try {
+                                Config.screenNumber = Config.lastScreen;
+                                execute(Service.askForSumm(Config.lastScreen, update.getMessage().getChatId()));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         break;
                     }
                 }
@@ -150,7 +172,6 @@ public class Bot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
