@@ -91,6 +91,7 @@ public class Bot extends TelegramLongPollingBot {
                     firstWord = update.getMessage().getText();
                 }
                 switch (firstWord) {
+                    case "/time@OBRTTestBot":
                     case "/time": {
 
                         SendMessage messg = new SendMessage()
@@ -103,8 +104,8 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     }
-                    case "/budget":
-                    case "/budget@OBRTTestBot": {
+                    case "/budget@OBRTTestBot":
+                    case "/budget": {
                         try {
                             if (!Config.enteringSumm)
                                 execute(Keyboards.sendInlineKeyBoardMessage(user_id, Config.screenNumber));
