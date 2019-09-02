@@ -91,6 +91,7 @@ public class Keyboards {
         InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton04 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton05 = new InlineKeyboardButton();
         inlineKeyboardButton01.setText("Аренда");
         inlineKeyboardButton01.setCallbackData("Аренда");
         inlineKeyboardButton02.setText("Электричество");
@@ -99,9 +100,12 @@ public class Keyboards {
         inlineKeyboardButton03.setCallbackData("Вода");
         inlineKeyboardButton04.setText("Обслуживание");
         inlineKeyboardButton04.setCallbackData("Обслуживание");
+        inlineKeyboardButton05.setText("Отменить ввод");
+        inlineKeyboardButton05.setCallbackData("Отменить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow03 = new ArrayList<>();
 
         keyboardButtonsRow01.add(inlineKeyboardButton01);
         keyboardButtonsRow01.add(inlineKeyboardButton02);
@@ -109,9 +113,12 @@ public class Keyboards {
         keyboardButtonsRow02.add(inlineKeyboardButton03);
         keyboardButtonsRow02.add(inlineKeyboardButton04);
 
+        keyboardButtonsRow03.add(inlineKeyboardButton05);
+
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow01);
         rowList.add(keyboardButtonsRow02);
+        rowList.add(keyboardButtonsRow03);
 
         inlineKeyboardMarkup0.setKeyboard(rowList);
         return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup0);
@@ -125,6 +132,7 @@ public class Keyboards {
         InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton04 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton05 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton06 = new InlineKeyboardButton();
         inlineKeyboardButton01.setText("ЕСВ");
         inlineKeyboardButton01.setCallbackData("ЕСВ");
         inlineKeyboardButton02.setText("НДС");
@@ -135,9 +143,12 @@ public class Keyboards {
         inlineKeyboardButton04.setCallbackData("Военный налог");
         inlineKeyboardButton05.setText("Единый налог");
         inlineKeyboardButton05.setCallbackData("Единый налог");
+        inlineKeyboardButton06.setText("Отменить ввод");
+        inlineKeyboardButton06.setCallbackData("Отменить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow03 = new ArrayList<>();
 
         keyboardButtonsRow01.add(inlineKeyboardButton01);
         keyboardButtonsRow01.add(inlineKeyboardButton02);
@@ -146,26 +157,96 @@ public class Keyboards {
         keyboardButtonsRow02.add(inlineKeyboardButton04);
         keyboardButtonsRow02.add(inlineKeyboardButton05);
 
+        keyboardButtonsRow03.add(inlineKeyboardButton06);
+
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow01);
         rowList.add(keyboardButtonsRow02);
+        rowList.add(keyboardButtonsRow03);
 
         inlineKeyboardMarkup0.setKeyboard(rowList);
         return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup0);
     }
 
     private static SendMessage generateListOfHouseholdButtons(long chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup0 = new InlineKeyboardMarkup();
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton04 = new InlineKeyboardButton();
         inlineKeyboardButton01.setText("Уборка");
         inlineKeyboardButton01.setCallbackData("Уборка");
         inlineKeyboardButton02.setText("Ремонты");
         inlineKeyboardButton02.setCallbackData("Ремонты");
         inlineKeyboardButton03.setText("Хозтовары");
         inlineKeyboardButton03.setCallbackData("Хозтовары");
+        inlineKeyboardButton04.setText("Отменить ввод");
+        inlineKeyboardButton04.setCallbackData("Отменить ввод");
+
+        List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow03 = new ArrayList<>();
+
+        keyboardButtonsRow01.add(inlineKeyboardButton01);
+        keyboardButtonsRow01.add(inlineKeyboardButton02);
+
+        keyboardButtonsRow02.add(inlineKeyboardButton03);
+
+        keyboardButtonsRow03.add(inlineKeyboardButton04);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow01);
+        rowList.add(keyboardButtonsRow02);
+        rowList.add(keyboardButtonsRow03);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup);
+    }
+
+    private static SendMessage generateListOfOfficeButtons(long chatId) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
+        inlineKeyboardButton01.setText("Канцтовары");
+        inlineKeyboardButton01.setCallbackData("Канцтовары");
+        inlineKeyboardButton02.setText("Связь");
+        inlineKeyboardButton02.setCallbackData("Связь");
+        inlineKeyboardButton03.setText("Отменить ввод");
+        inlineKeyboardButton03.setCallbackData("Отменить ввод");
+
+        List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow03 = new ArrayList<>();
+
+        keyboardButtonsRow01.add(inlineKeyboardButton01);
+        keyboardButtonsRow01.add(inlineKeyboardButton02);
+
+        keyboardButtonsRow02.add(inlineKeyboardButton03);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow01);
+        rowList.add(keyboardButtonsRow02);
+        rowList.add(keyboardButtonsRow03);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup);
+    }
+
+    private static SendMessage generateListOfPersonalButtons(long chatId) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
+        inlineKeyboardButton01.setText("Зарплата");
+        inlineKeyboardButton01.setCallbackData("Зарплата");
+        inlineKeyboardButton02.setText("Обучение");
+        inlineKeyboardButton02.setCallbackData("Обучение");
+        inlineKeyboardButton03.setText("Отменить ввод");
+        inlineKeyboardButton03.setCallbackData("Отменить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
@@ -179,52 +260,8 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow01);
         rowList.add(keyboardButtonsRow02);
 
-        inlineKeyboardMarkup0.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup0);
-    }
-
-    private static SendMessage generateListOfOfficeButtons(long chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup0 = new InlineKeyboardMarkup();
-
-        InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
-        inlineKeyboardButton01.setText("Канцтовары");
-        inlineKeyboardButton01.setCallbackData("Канцтовары");
-        inlineKeyboardButton02.setText("Связь");
-        inlineKeyboardButton02.setCallbackData("Связь");
-
-        List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
-
-        keyboardButtonsRow01.add(inlineKeyboardButton01);
-        keyboardButtonsRow01.add(inlineKeyboardButton02);
-
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(keyboardButtonsRow01);
-
-        inlineKeyboardMarkup0.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup0);
-    }
-
-    private static SendMessage generateListOfPersonalButtons(long chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup0 = new InlineKeyboardMarkup();
-
-        InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
-        inlineKeyboardButton01.setText("Зарплата");
-        inlineKeyboardButton01.setCallbackData("Зарплата");
-        inlineKeyboardButton02.setText("Обучение");
-        inlineKeyboardButton02.setCallbackData("Обучение");
-
-        List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
-
-        keyboardButtonsRow01.add(inlineKeyboardButton01);
-        keyboardButtonsRow01.add(inlineKeyboardButton02);
-
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(keyboardButtonsRow01);
-
-        inlineKeyboardMarkup0.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup0);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup);
     }
 
     private static SendMessage generateListOfIncomeButtons(long chatId) {
@@ -232,20 +269,26 @@ public class Keyboards {
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
         inlineKeyboardButton01.setText("Выручка от продаж");
         inlineKeyboardButton01.setCallbackData("Выручка от продаж");
         inlineKeyboardButton02.setText("Прочие доходы");
         inlineKeyboardButton02.setCallbackData("Прочие доходы");
+        inlineKeyboardButton03.setText("Отменить ввод");
+        inlineKeyboardButton03.setCallbackData("Отменить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow03 = new ArrayList<>();
 
         keyboardButtonsRow01.add(inlineKeyboardButton01);
         keyboardButtonsRow02.add(inlineKeyboardButton02);
+        keyboardButtonsRow03.add(inlineKeyboardButton03);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow01);
         rowList.add(keyboardButtonsRow02);
+        rowList.add(keyboardButtonsRow03);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
         return new SendMessage().setChatId(chatId).setText("Выберите категорию доходов.").setReplyMarkup(inlineKeyboardMarkup);
@@ -262,6 +305,7 @@ public class Keyboards {
         InlineKeyboardButton inlineKeyboardButton16 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton17 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton18 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton999 = new InlineKeyboardButton();
 
         inlineKeyboardButton11.setText("Instagram");
         inlineKeyboardButton11.setCallbackData("Instagram");
@@ -277,11 +321,14 @@ public class Keyboards {
         inlineKeyboardButton17.setCallbackData("Tilda");
         inlineKeyboardButton18.setText("Прочее");
         inlineKeyboardButton18.setCallbackData("Прочее");
+        inlineKeyboardButton999.setText("Отменить ввод");
+        inlineKeyboardButton999.setCallbackData("Отменить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow11 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow12 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow13 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow14 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow15 = new ArrayList<>();
 
         keyboardButtonsRow11.add(inlineKeyboardButton11);
         keyboardButtonsRow11.add(inlineKeyboardButton12);
@@ -293,19 +340,21 @@ public class Keyboards {
         keyboardButtonsRow13.add(inlineKeyboardButton17);
 
         keyboardButtonsRow14.add(inlineKeyboardButton18);
+        keyboardButtonsRow15.add(inlineKeyboardButton999);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow11);
         rowList.add(keyboardButtonsRow12);
         rowList.add(keyboardButtonsRow13);
         rowList.add(keyboardButtonsRow14);
+        rowList.add(keyboardButtonsRow15);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
         return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup);
     }
 
     private static SendMessage generateListOfExpencesButtons(long chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup1 = new InlineKeyboardMarkup();
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton11 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton12 = new InlineKeyboardButton();
@@ -315,6 +364,7 @@ public class Keyboards {
         InlineKeyboardButton inlineKeyboardButton16 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton17 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton18 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton999 = new InlineKeyboardButton();
 
         inlineKeyboardButton11.setText("На персонал");
         inlineKeyboardButton11.setCallbackData("На персонал");
@@ -332,11 +382,14 @@ public class Keyboards {
         inlineKeyboardButton17.setCallbackData("Налоги");
         inlineKeyboardButton18.setText("Прочее");
         inlineKeyboardButton18.setCallbackData("Прочее");
+        inlineKeyboardButton999.setText("Отменить ввод");
+        inlineKeyboardButton999.setCallbackData("Отменить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow11 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow12 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow13 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow14 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow15 = new ArrayList<>();
 
         keyboardButtonsRow11.add(inlineKeyboardButton11);
         keyboardButtonsRow11.add(inlineKeyboardButton12);
@@ -350,35 +403,44 @@ public class Keyboards {
 
         keyboardButtonsRow14.add(inlineKeyboardButton18);
 
+        keyboardButtonsRow15.add(inlineKeyboardButton999);
+
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow11);
         rowList.add(keyboardButtonsRow12);
         rowList.add(keyboardButtonsRow13);
         rowList.add(keyboardButtonsRow14);
+        rowList.add(keyboardButtonsRow15);
 
-        inlineKeyboardMarkup1.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите категорию расходов.").setReplyMarkup(inlineKeyboardMarkup1);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return new SendMessage().setChatId(chatId).setText("Выберите категорию расходов.").setReplyMarkup(inlineKeyboardMarkup);
     }
 
     private static SendMessage generateWelcomeButtons(long chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup0 = new InlineKeyboardMarkup();
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
         inlineKeyboardButton01.setText("Расходы");
         inlineKeyboardButton01.setCallbackData("Расходы");
         inlineKeyboardButton02.setText("Доходы");
         inlineKeyboardButton02.setCallbackData("Доходы");
+        inlineKeyboardButton03.setText("Отменить ввод");
+        inlineKeyboardButton03.setCallbackData("Отменить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
 
         keyboardButtonsRow01.add(inlineKeyboardButton01);
         keyboardButtonsRow01.add(inlineKeyboardButton02);
+        keyboardButtonsRow02.add(inlineKeyboardButton03);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow01);
+        rowList.add(keyboardButtonsRow02);
 
-        inlineKeyboardMarkup0.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите действие.").setReplyMarkup(inlineKeyboardMarkup0);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return new SendMessage().setChatId(chatId).setText("Выберите действие.").setReplyMarkup(inlineKeyboardMarkup);
     }
 }

@@ -4,14 +4,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -95,7 +90,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "/time": {
 
                         SendMessage messg = new SendMessage()
-                                .setChatId(user_id)
+                                .setChatId(chat_id)
                                 .setText(new Date().toString());
                         try {
                             execute(messg); // Sending our message object to user
@@ -108,7 +103,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "/budget": {
                         try {
                             if (!Config.enteringSumm)
-                                execute(Keyboards.sendInlineKeyBoardMessage(user_id, Config.screenNumber));
+                                execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -118,8 +113,21 @@ public class Bot extends TelegramLongPollingBot {
                         System.out.println(update);
                         try {
                             SendMessage msg = new SendMessage()
-                                    .setChatId(user_id)
+                                    .setChatId(chat_id)
                                     .setText(update.toString());
+                            execute(msg);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case "/start":
+                    case "/start@OBRTTestBot": {
+                        System.out.println(update);
+                        try {
+                            SendMessage msg = new SendMessage()
+                                    .setChatId(chat_id)
+                                    .setText("Добро пожаловать!");
                             execute(msg);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -139,16 +147,18 @@ public class Bot extends TelegramLongPollingBot {
                             } else {
                                 Service.logToDDS(update);
                                 jokesAboutSumm(update);
-                                Config.screenNumber = 0;
-                                Config.enteringSumm = false;
-                                Config.fillingBudget = false;
+                                try {
+                                    execute(Service.cancelEnteringSumm(update.getMessage().getChatId()));
+                                } catch (TelegramApiException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             }
                         }
 //                        if (update.getMessage().getText().indexOf(" ") > 0)
-                        if (!Config.fillingBudget)
+                        if (!Config.fillingBudget) {
                             Service.logToGeneral(update);
-                        else {
+                        } else {
                             try {
                                 Config.screenNumber = Config.lastScreen;
                                 execute(Service.askForSumm(Config.lastScreen, update.getMessage().getChatId()));
@@ -167,8 +177,10 @@ public class Bot extends TelegramLongPollingBot {
                 Long currentChatID = update.getCallbackQuery().getMessage().getChatId();
                 if (Config.screenNumber < 100 & Config.screenNumber > 0) {
                     execute(Keyboards.sendInlineKeyBoardMessage(currentChatID, Config.screenNumber));
-                } else {
+                } else if (Config.screenNumber != Config.EXIT) {
                     execute(Service.askForSumm(Config.screenNumber, currentChatID));
+                } else {
+                    execute(Service.cancelEnteringSumm(currentChatID));
                 }
             } catch (TelegramApiException e) {
                 e.printStackTrace();
@@ -194,39 +206,7 @@ public class Bot extends TelegramLongPollingBot {
                 .setChatId(update.getMessage().getChatId())
                 .setText(greetText);
         try {
-            execute(messg); // Sending our message object to user
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void setButtons(SendMessage sendMessage) {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(true);
-
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton("First button"));
-        keyboardFirstRow.add(new KeyboardButton("Second button"));
-
-        keyboardRowList.add(keyboardFirstRow);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
-
-    }
-
-    private void sendMsg(Message message, String default_text) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(message.getChatId().toString());
-//        sendMessage.setReplyToMessageId(message.getMessageId());
-        sendMessage.setText(default_text);
-
-        try {
-            execute(sendMessage);
+            execute(messg);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
