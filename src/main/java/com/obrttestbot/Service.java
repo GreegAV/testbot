@@ -220,6 +220,14 @@ public class Service {
         return string4Trim.substring(string4Trim.indexOf(" ") + 1);
     }
 
+    public static SendMessage cancelEnteringSumm(long chatId) {
+        Config.screenNumber = Config.WELCOME_SCREEN;
+        Config.lastScreen = Config.WELCOME_SCREEN;
+        Config.enteringSumm = false;
+        Config.fillingBudget = false;
+        return new SendMessage().setChatId(chatId).setText("Спасибо за сотрудничество.");
+    }
+
     public static SendMessage askForSumm(int screenNumber, long chatId) {
         Config.screenNumber = -1;
         Config.lastScreen = screenNumber;
