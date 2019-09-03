@@ -90,7 +90,7 @@ class Config {
         APPLICATION_NAME = config.getProperty("appName");
         SPREADSHEET_URL = config.getProperty("sheetsURL");
 
-        buttonsNumbers.put("Отменить ввод", Config.EXIT);
+        buttonsNumbers.put("Прекратить ввод", Config.EXIT);
         buttonsNumbers.put("Расходы", Config.EXPENSES_SCREEN);
 
         buttonsNumbers.put("На персонал", Config.EXPENSES_PERSONAL_SCREEN);
