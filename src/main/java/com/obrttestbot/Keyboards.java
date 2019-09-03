@@ -100,8 +100,8 @@ public class Keyboards {
         inlineKeyboardButton03.setCallbackData("Вода");
         inlineKeyboardButton04.setText("Обслуживание");
         inlineKeyboardButton04.setCallbackData("Обслуживание");
-        inlineKeyboardButton05.setText("Отменить ввод");
-        inlineKeyboardButton05.setCallbackData("Отменить ввод");
+        inlineKeyboardButton05.setText("Прекратить ввод");
+        inlineKeyboardButton05.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
@@ -143,8 +143,8 @@ public class Keyboards {
         inlineKeyboardButton04.setCallbackData("Военный налог");
         inlineKeyboardButton05.setText("Единый налог");
         inlineKeyboardButton05.setCallbackData("Единый налог");
-        inlineKeyboardButton06.setText("Отменить ввод");
-        inlineKeyboardButton06.setCallbackData("Отменить ввод");
+        inlineKeyboardButton06.setText("Прекратить ввод");
+        inlineKeyboardButton06.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
@@ -181,8 +181,8 @@ public class Keyboards {
         inlineKeyboardButton02.setCallbackData("Ремонты");
         inlineKeyboardButton03.setText("Хозтовары");
         inlineKeyboardButton03.setCallbackData("Хозтовары");
-        inlineKeyboardButton04.setText("Отменить ввод");
-        inlineKeyboardButton04.setCallbackData("Отменить ввод");
+        inlineKeyboardButton04.setText("Прекратить ввод");
+        inlineKeyboardButton04.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
@@ -214,8 +214,8 @@ public class Keyboards {
         inlineKeyboardButton01.setCallbackData("Канцтовары");
         inlineKeyboardButton02.setText("Связь");
         inlineKeyboardButton02.setCallbackData("Связь");
-        inlineKeyboardButton03.setText("Отменить ввод");
-        inlineKeyboardButton03.setCallbackData("Отменить ввод");
+        inlineKeyboardButton03.setText("Прекратить ввод");
+        inlineKeyboardButton03.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
@@ -245,8 +245,8 @@ public class Keyboards {
         inlineKeyboardButton01.setCallbackData("Зарплата");
         inlineKeyboardButton02.setText("Обучение");
         inlineKeyboardButton02.setCallbackData("Обучение");
-        inlineKeyboardButton03.setText("Отменить ввод");
-        inlineKeyboardButton03.setCallbackData("Отменить ввод");
+        inlineKeyboardButton03.setText("Прекратить ввод");
+        inlineKeyboardButton03.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
@@ -274,8 +274,8 @@ public class Keyboards {
         inlineKeyboardButton01.setCallbackData("Выручка от продаж");
         inlineKeyboardButton02.setText("Прочие доходы");
         inlineKeyboardButton02.setCallbackData("Прочие доходы");
-        inlineKeyboardButton03.setText("Отменить ввод");
-        inlineKeyboardButton03.setCallbackData("Отменить ввод");
+        inlineKeyboardButton03.setText("Прекратить ввод");
+        inlineKeyboardButton03.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
@@ -321,8 +321,8 @@ public class Keyboards {
         inlineKeyboardButton17.setCallbackData("Tilda");
         inlineKeyboardButton18.setText("Прочее");
         inlineKeyboardButton18.setCallbackData("Прочее");
-        inlineKeyboardButton999.setText("Отменить ввод");
-        inlineKeyboardButton999.setCallbackData("Отменить ввод");
+        inlineKeyboardButton999.setText("Прекратить ввод");
+        inlineKeyboardButton999.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow11 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow12 = new ArrayList<>();
@@ -382,8 +382,8 @@ public class Keyboards {
         inlineKeyboardButton17.setCallbackData("Налоги");
         inlineKeyboardButton18.setText("Прочее");
         inlineKeyboardButton18.setCallbackData("Прочее");
-        inlineKeyboardButton999.setText("Отменить ввод");
-        inlineKeyboardButton999.setCallbackData("Отменить ввод");
+        inlineKeyboardButton999.setText("Прекратить ввод");
+        inlineKeyboardButton999.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow11 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow12 = new ArrayList<>();
@@ -426,8 +426,8 @@ public class Keyboards {
         inlineKeyboardButton01.setCallbackData("Расходы");
         inlineKeyboardButton02.setText("Доходы");
         inlineKeyboardButton02.setCallbackData("Доходы");
-        inlineKeyboardButton03.setText("Отменить ввод");
-        inlineKeyboardButton03.setCallbackData("Отменить ввод");
+        inlineKeyboardButton03.setText("Прекратить ввод");
+        inlineKeyboardButton03.setCallbackData("Прекратить ввод");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
