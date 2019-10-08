@@ -57,24 +57,20 @@ public class Service {
         }
     }
 
-    static void logToDDS(Update update) {
+    static void prepareResultString(Update update) {
         //   0      1           2          3       4      5        6          7
         // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
-        String[] resultString = new String[8];
-        for (int i = 0; i < 8; i++) {
-            resultString[i] = " ";
-        }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
 
         //add date of operation
-        resultString[0] = date;
+        Config.resultString[0] = date;
 
         //add category of summ
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
             if (entry.getValue().equals(Config.lastScreen)) {
-                resultString[1] = entry.getKey();
+                Config.resultString[1] = entry.getKey();
                 break;
             }
         }
@@ -83,21 +79,18 @@ public class Service {
         if (Config.lastScreen >= 100) {
             for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
                 if (entry.getValue().equals(Config.lastScreen / 10)) {
-                    resultString[7] = entry.getKey();
+                    Config.resultString[7] = entry.getKey();
                     break;
                 }
             }
         } else {
             for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
                 if (entry.getValue().equals(Config.lastScreen)) {
-                    resultString[7] = entry.getKey();
+                    Config.resultString[7] = entry.getKey();
                     break;
                 }
             }
         }
-
-        //add name of author of operation
-        resultString[2] = formatUserName(update);
 
         // cutting out the summ
         String inputSumm = update.getMessage().getText().replace(',', '.');
@@ -106,23 +99,17 @@ public class Service {
 
         // add type of summ
         if (Config.lastScreen < 100) {
-            resultString[3] = String.valueOf(incomeSumm);
-            resultString[5] = String.valueOf(incomeSumm);
-            resultString[6] = "1. Доход";
+            Config.resultString[3] = String.valueOf(incomeSumm);
+            Config.resultString[5] = String.valueOf(incomeSumm);
+            Config.resultString[6] = "1. Доход";
         } else {
-            resultString[4] = String.valueOf(incomeSumm);
-            resultString[5] = String.valueOf((-1.0) * incomeSumm);
-            resultString[6] = "2. Расход";
-        }
-
-        try {
-            Service.writeToSheet(Arrays.asList(resultString), "ДДС");
-        } catch (IOException |
-                GeneralSecurityException e) {
-            e.printStackTrace();
+            Config.resultString[4] = String.valueOf(incomeSumm);
+            Config.resultString[5] = String.valueOf((-1.0) * incomeSumm);
+            Config.resultString[6] = "2. Расход";
         }
 
     }
+
 
     static boolean isNumeric(String str) {
         String tmp = str.replace(',', '.');
@@ -225,6 +212,10 @@ public class Service {
         Config.lastScreen = Config.WELCOME_SCREEN;
         Config.enteringSumm = false;
         Config.fillingBudget = false;
+        Config.waitingForContragent=false;
+        for (int i = 0; i < Config.resultString.length; i++) {
+            Config.resultString[i]="";
+        }
         return new SendMessage().setChatId(chatId).setText("Спасибо за сотрудничество.");
     }
 
@@ -243,4 +234,13 @@ public class Service {
         return new SendMessage().setChatId(chatId).setText("Введите сумму для категории: " + category);
     }
 
+    public static void logToDDS(Update update) {
+
+        try {
+            Service.writeToSheet(Arrays.asList(Config.resultString), "ДДС");
+        } catch (IOException |
+                GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+    }
 }

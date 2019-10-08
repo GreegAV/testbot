@@ -76,14 +76,14 @@ public class Bot extends TelegramLongPollingBot {
         Message message = update.getMessage();
 
         if (update.hasMessage()) {
-            long chat_id = update.getMessage().getChatId();
-            long user_id = update.getMessage().getFrom().getId();
-            if (message != null && message.hasText()) {
+            long chat_id = message.getChatId();
+//            long user_id = user.getId();
+            if (message.hasText()) {
                 String firstWord;
-                if (update.getMessage().getText().indexOf(" ") > 0) {
-                    firstWord = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
+                if (message.getText().indexOf(" ") > 0) {
+                    firstWord = message.getText().substring(0, message.getText().indexOf(" "));
                 } else {
-                    firstWord = update.getMessage().getText();
+                    firstWord = message.getText();
                 }
                 switch (firstWord) {
                     case "/time@OBRTTestBot":
@@ -93,14 +93,14 @@ public class Bot extends TelegramLongPollingBot {
                                 .setChatId(chat_id)
                                 .setText(new Date().toString());
                         try {
-                            execute(messg); // Sending our message object to user
+                            execute(messg);
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
                     }
-                    case "/budget@OBRTTestBot":
-                    case "/budget": {
+                    case "/cashflow@OBRTTestBot":
+                    case "/cashflow": {
                         try {
                             if (!Config.enteringSumm)
                                 execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
@@ -112,31 +112,38 @@ public class Bot extends TelegramLongPollingBot {
                     case "/ident": {
                         System.out.println(update);
                         try {
+                            String text = "";
+                            if (message.getChat().isGroupChat()) {
+                                text += "Group Chat\n";
+                            }
+                            if (message.getChat().isUserChat()) {
+                                text += "User Chat\n";
+                            }
                             SendMessage msg = new SendMessage()
                                     .setChatId(chat_id)
-                                    .setText(update.toString());
+                                    .setText(text);
                             execute(msg);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
                     }
-                    case "/start":
-                    case "/start@OBRTTestBot": {
-                        System.out.println(update);
-                        try {
-                            SendMessage msg = new SendMessage()
-                                    .setChatId(chat_id)
-                                    .setText("Добро пожаловать!");
-                            execute(msg);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    }
+//                    case "/start":
+//                    case "/start@OBRTTestBot": {
+//                        try {
+//                            SendMessage msg = new SendMessage()
+//                                    .setChatId(chat_id)
+//                                    .setText("Добро пожаловать!");
+//                            execute(msg);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                        break;
+//                    }
                     default: {
+                        //waiting for the summ
                         if (Config.screenNumber == -1 & Config.enteringSumm) {
-                            if (!Service.isNumeric(update.getMessage().getText())) {
+                            if (!Service.isNumeric(message.getText())) {
                                 try {
                                     Config.screenNumber = Config.lastScreen;
                                     Config.enteringSumm = true;
@@ -145,32 +152,46 @@ public class Bot extends TelegramLongPollingBot {
                                     e.printStackTrace();
                                 }
                             } else {
-                                Service.logToDDS(update);
-                                jokesAboutSumm(update);
+                                Service.prepareResultString(update);
+                                Config.waitingForContragent=true;
+                                Config.enteringSumm=false;
                                 try {
-                                    execute(Service.cancelEnteringSumm(update.getMessage().getChatId()));
+                                    execute(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Укажите контрагента."));
                                 } catch (TelegramApiException e) {
                                     e.printStackTrace();
                                 }
                                 break;
                             }
                         }
-//                        if (update.getMessage().getText().indexOf(" ") > 0)
-                        if (!Config.fillingBudget) {
-                            Service.logToGeneral(update);
-                        } else {
+                        //summ entered, waiting for the Contragent
+                        if (Config.waitingForContragent) {
+                            //add name of author of operation
+                            Config.resultString[2] = update.getMessage().getText();
+                            Service.logToDDS(update);
+                            jokesAboutSumm(update);
                             try {
-                                Config.screenNumber = Config.lastScreen;
-                                execute(Service.askForSumm(Config.lastScreen, update.getMessage().getChatId()));
+                                execute(Service.cancelEnteringSumm(update.getMessage().getChatId()));
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
+                            break;
+                        }
+                        //Nothing waiting, just log all conversation
+                        if (!Config.fillingBudget) {
+                            Service.logToGeneral(update);
+//                        } else {
+//                            try {
+//                                Config.screenNumber = Config.lastScreen;
+//                                execute(Service.askForSumm(Config.lastScreen, message.getChatId()));
+//                            } catch (TelegramApiException e) {
+//                                e.printStackTrace();
+//                            }
                         }
                         break;
                     }
                 }
             }
-        } else if (update.hasCallbackQuery()) { // обработка нажатий на кнопки
+        } else if (update.hasCallbackQuery()) { // обработка нажатий на кнопкиs
             try {
                 String messageFromTheButton = update.getCallbackQuery().getData();
                 Config.screenNumber = Config.buttonsNumbers.get(messageFromTheButton);
@@ -189,7 +210,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void jokesAboutSumm(Update update) {
-        double incomeSumm = Double.parseDouble(update.getMessage().getText().replace(',', '.'));
+        int incomeSumm = (int) Math.abs(Double.parseDouble(Config.resultString[5].replace(',', '.')));
         String greetText;
         if (Config.lastScreen == Config.INCOME_REVENUE | Config.lastScreen == Config.INCOME_OTHERREVENUE) {
             if (incomeSumm > 10000) {
