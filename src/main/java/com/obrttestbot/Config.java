@@ -32,9 +32,11 @@ class Config {
     public static String SPREADSHEET_URL;
     public static int screenNumber = 0;
     public static int lastScreen = 0;
+    public static String[] resultString = new String[8];
 
     public static boolean enteringSumm=false;
     public static boolean fillingBudget=false;
+    public static boolean waitingForContragent=false;
 
     public static final int WELCOME_SCREEN = 0;
 
@@ -83,6 +85,10 @@ class Config {
     public static final int EXIT = 999;
 
     static void loadProperties() {
+        for (int i = 0; i < 8; i++) {
+            resultString[i] = " ";
+        }
+
         Config config = Config.getInstance();
 
         BOT_NAME = config.getProperty("botName");
