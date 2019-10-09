@@ -31,30 +31,21 @@ public class Service {
                 .execute();
     }
 
-    static void logToGeneral(Update update) {
+    static List<Object> formatStringsForLog(Update update) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
+        String name = formatUserName(update);
+        String text = update.getMessage().getText();
 
-        long userID = update.getMessage().getChatId();
-//        String sheetName = "General";
-//        String userName = "";
-        String textFromBot = update.getMessage().getText();
-//        boolean isCommand = textFromBot.charAt(0) == '/';
-//        if (isCommand) {
-//            sheetName = "Test";
-//            String command = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf(" "));
-//            textFromBot = trimFirstWordFromMessage(textFromBot);
-//        } else {
-        textFromBot = date + " " + formatUserName(update) + " " + textFromBot;
+        return Arrays.asList((date + " " + name + " " + text).split(" "));
+
+//        List<Object> sentence = Arrays.asList(textFromBot.split(" "));
+
+//        try {
+//            Service.writeToSheet(sentence, "General");
+//        } catch (IOException | GeneralSecurityException e) {
+//            e.printStackTrace();
 //        }
-
-        List<Object> sentence = Arrays.asList(textFromBot.split(" "));
-
-        try {
-            Service.writeToSheet(sentence, "General");
-        } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
-        }
     }
 
     static void prepareResultString(Update update) {
@@ -107,9 +98,7 @@ public class Service {
             Config.resultString[5] = String.valueOf((-1.0) * incomeSumm);
             Config.resultString[6] = "2. Расход";
         }
-
     }
-
 
     static boolean isNumeric(String str) {
         String tmp = str.replace(',', '.');
@@ -118,72 +107,6 @@ public class Service {
         if (tmp.indexOf('.') != tmp.lastIndexOf('.'))
             return false;
         return tmp.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
-    }
-
-    static void logToBudget(Update update) {
-        //   0      1           2          3       4      5        6          7
-        // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
-//        String[] resultString = new String[8];
-//        for (int i = 0; i < 8; i++) {
-//            resultString[i] = " ";
-//        }
-
-        String sheetName = "Расход";
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
-
-        // Prepare string for logging into budget
-        StringBuilder textToLog = new StringBuilder();
-
-        //add date of operation
-//        resultString[0] = date;
-        textToLog.append(date);
-        textToLog.append(" ");
-
-        //add name of author of operation
-        String kontragent = formatUserName(update);
-//        resultString[2] = kontragent;
-        textToLog.append(kontragent);
-        textToLog.append(" ");
-
-        //trim the command /budget from the logstring
-        String sourceMessage = trimFirstWordFromMessage(update.getMessage().getText());
-
-        // cutting out the summ
-        String sumString = sourceMessage.substring(0, sourceMessage.indexOf(" "));
-        sumString = sumString.replace('.', ',').trim();
-
-        double summa = Double.parseDouble(sumString.replace(',', '.'));
-        if (summa >= 0) {
-            sheetName = "Приход"; //by default - Расход
-//            resultString[3] = sumString;
-//            resultString[4] = " ";
-//            resultString[5] = sumString;
-//            resultString[6] = "1. Доход";
-        } else {
-            sumString = sumString.replace('-', ' ').trim();
-//            resultString[3] = " ";
-//            resultString[4] = sumString;
-//            resultString[5] = sumString;
-//            resultString[6] = "2. Расход";
-        }
-        textToLog.append(sumString);
-        textToLog.append(" ");
-
-        //trim the summ from the logstring and log the rest of the message
-        String restString = trimFirstWordFromMessage(sourceMessage);
-        textToLog.append(restString);
-//        resultString[1] = restString;
-
-        List<Object> sentence = Arrays.asList(textToLog.toString().split(" "));
-
-        try {
-            Service.writeToSheet(sentence, sheetName);
-//            Service.writeToSheet(Arrays.asList(resultString), "ДДС");
-        } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
-        }
     }
 
     private static String formatUserName(Update update) {
@@ -203,18 +126,14 @@ public class Service {
         return stringBuilder.toString();
     }
 
-    private static String trimFirstWordFromMessage(String string4Trim) {
-        return string4Trim.substring(string4Trim.indexOf(" ") + 1);
-    }
-
     public static SendMessage cancelEnteringSumm(long chatId) {
         Config.screenNumber = Config.WELCOME_SCREEN;
         Config.lastScreen = Config.WELCOME_SCREEN;
         Config.enteringSumm = false;
         Config.fillingBudget = false;
-        Config.waitingForContragent=false;
+        Config.waitingForContragent = false;
         for (int i = 0; i < Config.resultString.length; i++) {
-            Config.resultString[i]="";
+            Config.resultString[i] = "";
         }
         return new SendMessage().setChatId(chatId).setText("Спасибо за сотрудничество.");
     }
@@ -234,13 +153,14 @@ public class Service {
         return new SendMessage().setChatId(chatId).setText("Введите сумму для категории: " + category);
     }
 
-    public static void logToDDS(Update update) {
-
+    public static void logToSheets(List<Object> stringsToLog, String sheetName) {
         try {
-            Service.writeToSheet(Arrays.asList(Config.resultString), "ДДС");
+            Service.writeToSheet(stringsToLog, sheetName);
         } catch (IOException |
                 GeneralSecurityException e) {
             e.printStackTrace();
         }
     }
+
+
 }
