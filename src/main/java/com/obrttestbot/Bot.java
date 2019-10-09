@@ -6,70 +6,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Arrays;
 import java.util.Date;
 
-
 public class Bot extends TelegramLongPollingBot {
-    // По правильному, это надо было сделать отдельной веткой в гитхабе, но так сложилось :(
-
-//    public void onUpdateReceived(Update update) {
-//        update.getUpdateId();
-//        SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
-//
-//        String msgToBot = update.getMessage().getText();
-//        System.out.println(msgToBot);
-//
-//        if (msgToBot.equals("Hi!")) {
-//            sendMessage.setText("И тебе Хай!");
-//            try {
-//                execute(sendMessage);
-//            } catch (TelegramApiException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-////        if (msgToBot.equals("@Счет".toLowerCase()) || msgToBot.equals("@Счёт".toLowerCase())) {
-////            sendMessage.setText("Кому счет?");
-////            try {
-////                execute(sendMessage);
-////            } catch (TelegramApiException e) {
-////                e.printStackTrace();
-////            }
-////        }
-//
-//        if (msgToBot.equals("@ident")) {
-//            String sendtext = "Ident:\n";
-//            sendtext += "Chat ID: " + update.getMessage().getChatId();
-//            sendtext += "\n";
-//            String getFirstName = update.getMessage().getFrom().getFirstName();
-//            String getLastName = update.getMessage().getFrom().getLastName();
-//            String getUserName = update.getMessage().getFrom().getUserName();
-//            if (getFirstName != null) {
-//                sendtext += "update.getMessage().getFrom().getFirstName(): " + getFirstName;
-//                sendtext += "\n";
-//            }
-//            if (getUserName != null) {
-//                sendtext += "update.getMessage().getFrom().getLastName(): " + getLastName;
-//                sendtext += "\n";
-//            }
-//            if (getUserName != null) {
-//                sendtext += "update.getMessage().getFrom().getUserName(): " + getUserName;
-//                sendtext += "\n";
-//            }
-////            System.out.println(sendtext);
-//            sendtext = "Idented.";
-//            sendMessage.setText(sendtext);
-//            System.out.println(update.getMessage());
-//            try {
-//                execute(sendMessage);
-//            } catch (TelegramApiException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        ///////////////////// Finally log to sheets
-//        logToGeneral(update);
-//
-//    }
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -111,35 +51,21 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     case "/ident": {
                         System.out.println(update);
+                        String toPrint = update.toString()
+                                .replace("}", "}\n")
+                                .replace("{", "{\n");
+                        System.out.println(toPrint);
                         try {
-                            String text = "";
-                            if (message.getChat().isGroupChat()) {
-                                text += "Group Chat\n";
-                            }
-                            if (message.getChat().isUserChat()) {
-                                text += "User Chat\n";
-                            }
                             SendMessage msg = new SendMessage()
                                     .setChatId(chat_id)
-                                    .setText(text);
+                                    .setText(toPrint);
                             execute(msg);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
                     }
-//                    case "/start":
-//                    case "/start@OBRTTestBot": {
-//                        try {
-//                            SendMessage msg = new SendMessage()
-//                                    .setChatId(chat_id)
-//                                    .setText("Добро пожаловать!");
-//                            execute(msg);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                        break;
-//                    }
+
                     default: {
                         //waiting for the summ
                         if (Config.screenNumber == -1 & Config.enteringSumm) {
@@ -153,8 +79,8 @@ public class Bot extends TelegramLongPollingBot {
                                 }
                             } else {
                                 Service.prepareResultString(update);
-                                Config.waitingForContragent=true;
-                                Config.enteringSumm=false;
+                                Config.waitingForContragent = true;
+                                Config.enteringSumm = false;
                                 try {
                                     execute(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Укажите контрагента."));
                                 } catch (TelegramApiException e) {
@@ -167,7 +93,7 @@ public class Bot extends TelegramLongPollingBot {
                         if (Config.waitingForContragent) {
                             //add name of author of operation
                             Config.resultString[2] = update.getMessage().getText();
-                            Service.logToDDS(update);
+                            Service.logToSheets(Arrays.asList(Config.resultString), "ДДС");
                             jokesAboutSumm(update);
                             try {
                                 execute(Service.cancelEnteringSumm(update.getMessage().getChatId()));
@@ -178,14 +104,7 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         //Nothing waiting, just log all conversation
                         if (!Config.fillingBudget) {
-                            Service.logToGeneral(update);
-//                        } else {
-//                            try {
-//                                Config.screenNumber = Config.lastScreen;
-//                                execute(Service.askForSumm(Config.lastScreen, message.getChatId()));
-//                            } catch (TelegramApiException e) {
-//                                e.printStackTrace();
-//                            }
+                            Service.logToSheets(Service.formatStringsForLog(update), "General");
                         }
                         break;
                     }
