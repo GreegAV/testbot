@@ -39,13 +39,6 @@ public class Service {
 
         return Arrays.asList((date + " " + name + " " + text).split(" "));
 
-//        List<Object> sentence = Arrays.asList(textFromBot.split(" "));
-
-//        try {
-//            Service.writeToSheet(sentence, "General");
-//        } catch (IOException | GeneralSecurityException e) {
-//            e.printStackTrace();
-//        }
     }
 
     static void prepareResultString(Update update) {

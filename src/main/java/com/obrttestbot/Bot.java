@@ -4,10 +4,15 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -50,15 +55,17 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     }
                     case "/ident": {
-                        System.out.println(update);
-                        String toPrint = update.toString()
-                                .replace("}", "}\n")
-                                .replace("{", "{\n");
-                        System.out.println(toPrint);
+                        String[] ident = {
+                                String.valueOf(update.getMessage().getFrom().getId()),
+                                update.getMessage().getFrom().getUserName(),
+                                update.getMessage().getFrom().getFirstName(),
+                                update.getMessage().getFrom().getLastName(),
+                        };
+                        Service.logToSheets(Arrays.asList(ident), "Ident");
                         try {
                             SendMessage msg = new SendMessage()
                                     .setChatId(chat_id)
-                                    .setText(toPrint);
+                                    .setText("Idented");
                             execute(msg);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -160,5 +167,36 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return Config.BOT_TOKEN;
+    }
+
+    public void setButtons(SendMessage sendMessage) {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        keyboardFirstRow.add(new KeyboardButton("First button"));
+        keyboardFirstRow.add(new KeyboardButton("Second button"));
+
+        keyboardRowList.add(keyboardFirstRow);
+        replyKeyboardMarkup.setKeyboard(keyboardRowList);
+
+    }
+
+    private void sendMsg(Message message, String default_text) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(message.getChatId().toString());
+//        sendMessage.setReplyToMessageId(message.getMessageId());
+        sendMessage.setText(default_text);
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 }
