@@ -2,7 +2,6 @@ package com.obrttestbot;
 
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.AppendValuesResponse;
-import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,7 +9,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class Service {
     private static Sheets sheetsService;
@@ -29,23 +31,51 @@ public class Service {
                 .execute();
     }
 
-    public static void readFromSheet(String sheetName, String sheetTab, String[] range) throws IOException, GeneralSecurityException {
+    public static void readFromSheet(String sheetName, String sheetTab, String startCell, String targetRange)
+            throws IOException, GeneralSecurityException {
         sheetsService = GoogleTools.getSheetsService();
-        List<String> ranges = new ArrayList<>();
-        for (String rng : range) {
-            ranges.add(sheetTab + "!" + rng);
-        }
-//                Arrays.asList(sheetTab+"!E3");
-        BatchGetValuesResponse readResult = sheetsService.spreadsheets().values()
-                .batchGet(sheetName)
-                .setRanges(ranges)
-                .execute();
 
-        for (int i = 0; i < readResult.getValueRanges().size(); i++) {
-//            System.out.println("get(i)                         " + readResult.getValueRanges().get(i));
-//            System.out.println("get(i).getvalues               " + readResult.getValueRanges().get(i).getValues());
-            System.out.println(readResult.getValueRanges().get(i).getValues() != null ? readResult.getValueRanges().get(i).getValues().get(0).get(0) : "-");
+        String range = sheetTab + "!" + startCell + ":" + targetRange;
+        ValueRange response = sheetsService.spreadsheets().values()
+                .get(sheetName, range)
+                .execute();
+//
+        List<List<Object>> values = response.getValues();
+
+        if (values == null || values.isEmpty()) {
+            System.out.println("No data found.");
+        } else {
+//            System.out.println(values.get(1).get(0));
+//            System.out.println(values.get(1).get(2));
+//            System.out.println(values.get(2));
+            for (List row : values) {
+                if (row.get(0).toString().substring(0, 2).equals("16"))
+                    System.out.println(row.get(0));
+            }
         }
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+//        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+
+//        try {
+//            Date date = dateFormat.parse(
+//                    String.valueOf(readResult.getValueRanges().get(0).getValues().get(0).get(0)) +
+//                            " " +
+//                            String.valueOf(readResult.getValueRanges().get(1).getValues().get(0).get(0)));
+//            System.out.println("Data&Time: " + date);
+//
+////            System.out.println("Time: " + time);
+//            System.out.println("Read date: " + readResult.getValueRanges().get(0).getValues().get(0).get(0));
+//            System.out.println("Read time: " + readResult.getValueRanges().get(1).getValues().get(0).get(0));
+//            System.out.println("Formatted date: " + dateFormat.format(date));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        for (int i = 0; i < readResult.getValueRanges().size(); i++) {
+//            if (readResult.getValueRanges().get(i).getValues() != null) {
+//                System.out.print(readResult.getValueRanges().get(i).getValues().get(0).get(0));
+//                System.out.print("\t");
+//            }
+//        }
         System.out.println("\nReading finished");
     }
 
