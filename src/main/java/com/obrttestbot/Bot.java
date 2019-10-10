@@ -9,6 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -50,6 +52,15 @@ public class Bot extends TelegramLongPollingBot {
                             if (!Config.enteringSumm)
                                 execute(Keyboards.sendInlineKeyBoardMessage(chat_id, Config.screenNumber));
                         } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case "/read": {
+                        try {
+                            String[] testrange = {"E1", "E2", "E3", "E4", "E5"};
+                            Service.readFromSheet(Config.SPREADSHEET_URL, "Ident", testrange);
+                        } catch (IOException | GeneralSecurityException e) {
                             e.printStackTrace();
                         }
                         break;
