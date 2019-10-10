@@ -2,6 +2,7 @@ package com.obrttestbot;
 
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.AppendValuesResponse;
+import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -9,10 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Service {
     private static Sheets sheetsService;
@@ -29,6 +27,26 @@ public class Service {
                 .setInsertDataOption("INSERT_ROWS")
                 .setIncludeValuesInResponse(true)
                 .execute();
+    }
+
+    public static void readFromSheet(String sheetName, String sheetTab, String[] range) throws IOException, GeneralSecurityException {
+        sheetsService = GoogleTools.getSheetsService();
+        List<String> ranges = new ArrayList<>();
+        for (String rng : range) {
+            ranges.add(sheetTab + "!" + rng);
+        }
+//                Arrays.asList(sheetTab+"!E3");
+        BatchGetValuesResponse readResult = sheetsService.spreadsheets().values()
+                .batchGet(sheetName)
+                .setRanges(ranges)
+                .execute();
+
+        for (int i = 0; i < readResult.getValueRanges().size(); i++) {
+//            System.out.println("get(i)                         " + readResult.getValueRanges().get(i));
+//            System.out.println("get(i).getvalues               " + readResult.getValueRanges().get(i).getValues());
+            System.out.println(readResult.getValueRanges().get(i).getValues() != null ? readResult.getValueRanges().get(i).getValues().get(0).get(0) : "-");
+        }
+        System.out.println("\nReading finished");
     }
 
     static List<Object> formatStringsForLog(Update update) {
