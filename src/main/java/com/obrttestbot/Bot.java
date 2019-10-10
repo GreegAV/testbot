@@ -58,8 +58,10 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     case "/read": {
                         try {
-                            String[] testrange = {"E1", "E2", "E3", "E4", "E5"};
-                            Service.readFromSheet(Config.SPREADSHEET_URL, "Ident", testrange);
+                            Service.readFromSheet(Config.SPREADSHEET_URL,
+                                    "General",
+                                    "B1",
+                                    "B");
                         } catch (IOException | GeneralSecurityException e) {
                             e.printStackTrace();
                         }
@@ -125,6 +127,16 @@ public class Bot extends TelegramLongPollingBot {
                         //Nothing waiting, just log all conversation
                         if (!Config.fillingBudget) {
                             Service.logToSheets(Service.formatStringsForLog(update), "General");
+                            //TODO make identification by id service
+                            //GreegAV
+                            if (update.getMessage().getFrom().getId() == 221816696) {
+                                Service.logToSheets(Service.formatStringsForLog(update), update.getMessage().getFrom().getUserName());
+                            }
+                            // dma_k
+                            if (update.getMessage().getFrom().getId() == 269463036) {
+                                Service.logToSheets(Service.formatStringsForLog(update), update.getMessage().getFrom().getUserName());
+                            }
+
                         }
                         break;
                     }
