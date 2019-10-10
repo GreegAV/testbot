@@ -39,7 +39,6 @@ public class Service {
         ValueRange response = sheetsService.spreadsheets().values()
                 .get(sheetName, range)
                 .execute();
-//
         List<List<Object>> values = response.getValues();
 
         if (values == null || values.isEmpty()) {
