@@ -57,10 +57,12 @@ public class Bot extends TelegramLongPollingBot {
                     case "/ident": {
                         String[] ident = {
                                 String.valueOf(update.getMessage().getFrom().getId()),
-                                update.getMessage().getFrom().getUserName(),
-                                update.getMessage().getFrom().getFirstName(),
-                                update.getMessage().getFrom().getLastName(),
+                                update.getMessage().getFrom().getUserName() == null ? " " : update.getMessage().getFrom().getUserName(),
+                                update.getMessage().getFrom().getFirstName() == null ? " " : update.getMessage().getFrom().getFirstName(),
+                                update.getMessage().getFrom().getLastName() == null ? " " : update.getMessage().getFrom().getLastName(),
+                                update.getMessage().getChat().isGroupChat() ? update.getMessage().getChat().getTitle() : "Private chat"
                         };
+
                         Service.logToSheets(Arrays.asList(ident), "Ident");
                         try {
                             SendMessage msg = new SendMessage()
