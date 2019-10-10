@@ -130,12 +130,21 @@ public class Bot extends TelegramLongPollingBot {
                             //TODO make identification by id service
                             //GreegAV
                             if (update.getMessage().getFrom().getId() == 221816696) {
-                                Service.logToSheets(Service.formatStringsForLog(update), update.getMessage().getFrom().getUserName());
+                                Service.logToSheets(Service.formatStringsForLog(update), "GreegAV");
                             }
                             // dma_k
                             if (update.getMessage().getFrom().getId() == 269463036) {
-                                Service.logToSheets(Service.formatStringsForLog(update), update.getMessage().getFrom().getUserName());
+                                Service.logToSheets(Service.formatStringsForLog(update), "dma_k");
                             }
+                            // Анастасия
+                            if (update.getMessage().getFrom().getId() == 224606811) {
+                                Service.logToSheets(Service.formatStringsForLog(update), "Анастасия");
+                            }
+                            // Росочинская
+                            if (update.getMessage().getFrom().getId() == 548498472) {
+                                Service.logToSheets(Service.formatStringsForLog(update), "Росочинская");
+                            }
+
 
                         }
                         break;
