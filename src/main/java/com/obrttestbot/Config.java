@@ -24,14 +24,7 @@ class Config {
     }
 
     public static String getSheetNameByUserID(int i) {
-        String sheetName = "General";
-        for (Map.Entry<Integer, String> entry : Config.namesAndIDs.entrySet()) {
-            if (entry.getKey() == i) {
-                sheetName = entry.getValue();
-                break;
-            }
-        }
-        return sheetName;
+        return namesAndIDs.get(i) == null ? "General" : namesAndIDs.get(i);
     }
 
     private String getProperty(String key) {
@@ -97,12 +90,12 @@ class Config {
     public static final int EXIT = 999;
 
     static void loadProperties() {
-        namesAndIDs.put(221816696, "GreegAV");
-        namesAndIDs.put(269463036, "dma_k");
-        namesAndIDs.put(224606811, "Анастасия");
-        namesAndIDs.put(548498472, "Росочинская");
+        namesAndIDs.put(221816696, "OBRT");
+        namesAndIDs.put(269463036, "ДНК ЭДЖЕНСИ");
+        namesAndIDs.put(224606811, "ДНК ЭДЖЕНСИ");
+        namesAndIDs.put(548498472, "ДНК ЭДЖЕНСИ");
         namesAndIDs.put(515273686, "Алла");
-        namesAndIDs.put(148370030, "Батова");
+        namesAndIDs.put(148370030, "ДНК ЭДЖЕНСИ");
 
         for (int i = 0; i < 8; i++) {
             resultString[i] = " ";
