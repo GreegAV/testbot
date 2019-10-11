@@ -8,6 +8,7 @@ class Config {
 
     private static final String BUNDLE_NAME = "config";
     static Map<String, Integer> buttonsNumbers = new HashMap<>();
+    static Map<Integer, String> namesAndIDs = new HashMap<>();
     private static Config instance;
     private ResourceBundle resource;
 
@@ -22,6 +23,17 @@ class Config {
         return instance;
     }
 
+    public static String getSheetNameByUserID(int i) {
+        String sheetName = "General";
+        for (Map.Entry<Integer, String> entry : Config.namesAndIDs.entrySet()) {
+            if (entry.getKey() == i) {
+                sheetName = entry.getValue();
+                break;
+            }
+        }
+        return sheetName;
+    }
+
     private String getProperty(String key) {
         return (String) resource.getObject(key);
     }
@@ -34,9 +46,9 @@ class Config {
     public static int lastScreen = 0;
     public static String[] resultString = new String[8];
 
-    public static boolean enteringSumm=false;
-    public static boolean fillingBudget=false;
-    public static boolean waitingForContragent=false;
+    public static boolean enteringSumm = false;
+    public static boolean fillingBudget = false;
+    public static boolean waitingForContragent = false;
 
     public static final int WELCOME_SCREEN = 0;
 
@@ -85,6 +97,13 @@ class Config {
     public static final int EXIT = 999;
 
     static void loadProperties() {
+        namesAndIDs.put(221816696, "GreegAV");
+        namesAndIDs.put(269463036, "dma_k");
+        namesAndIDs.put(224606811, "Анастасия");
+        namesAndIDs.put(548498472, "Росочинская");
+        namesAndIDs.put(515273686, "Алла");
+        namesAndIDs.put(148370030, "Батова");
+
         for (int i = 0; i < 8; i++) {
             resultString[i] = " ";
         }

@@ -126,26 +126,12 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         //Nothing waiting, just log all conversation
                         if (!Config.fillingBudget) {
-                            Service.logToSheets(Service.formatStringsForLog(update), "General");
+                            List<Object> listForLogging = Service.formatStringsForLog(update);
+                            Service.logToSheets(listForLogging, "General");
                             //TODO make identification by id service
-                            //GreegAV
-                            if (update.getMessage().getFrom().getId() == 221816696) {
-                                Service.logToSheets(Service.formatStringsForLog(update), "GreegAV");
-                            }
-                            // dma_k
-                            if (update.getMessage().getFrom().getId() == 269463036) {
-                                Service.logToSheets(Service.formatStringsForLog(update), "dma_k");
-                            }
-                            // Анастасия
-                            if (update.getMessage().getFrom().getId() == 224606811) {
-                                Service.logToSheets(Service.formatStringsForLog(update), "Анастасия");
-                            }
-                            // Росочинская
-                            if (update.getMessage().getFrom().getId() == 548498472) {
-                                Service.logToSheets(Service.formatStringsForLog(update), "Росочинская");
-                            }
 
-
+                            String sheetNameByUserID = Config.getSheetNameByUserID(update.getMessage().getFrom().getId());
+                            Service.logToSheets(listForLogging, sheetNameByUserID);
                         }
                         break;
                     }
