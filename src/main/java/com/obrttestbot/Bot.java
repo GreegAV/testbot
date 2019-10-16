@@ -9,8 +9,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,7 +33,6 @@ public class Bot extends TelegramLongPollingBot {
                 switch (firstWord) {
                     case "/time@OBRTTestBot":
                     case "/time": {
-
                         SendMessage messg = new SendMessage()
                                 .setChatId(chat_id)
                                 .setText(new Date().toString());
@@ -56,18 +53,9 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     }
-                    case "/read": {
-                        try {
-                            Service.readFromSheet(Config.SPREADSHEET_URL,
-                                    "General",
-                                    "B1",
-                                    "B");
-                        } catch (IOException | GeneralSecurityException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    }
-                    case "/ident": {
+
+                    case "/ident":
+                    case "/ident@OBRTTestBot": {
                         String[] ident = {
                                 String.valueOf(update.getMessage().getFrom().getId()),
                                 update.getMessage().getFrom().getUserName() == null ? " " : update.getMessage().getFrom().getUserName(),
