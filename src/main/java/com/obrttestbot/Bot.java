@@ -128,7 +128,6 @@ public class Bot extends TelegramLongPollingBot {
                         if (!Config.fillingBudget) {
                             List<Object> listForLogging = Service.formatStringsForLog(update);
                             Service.logToSheets(listForLogging, "General");
-                            //TODO make identification by id service
 
                             String sheetNameByUserID = Config.getSheetNameByUserID(update.getMessage().getFrom().getId());
                             Service.logToSheets(listForLogging, sheetNameByUserID);

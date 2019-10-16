@@ -87,6 +87,8 @@ class Config {
     public static final int INCOME_REVENUE = 20;
     public static final int INCOME_OTHERREVENUE = 21;
 
+    public static final int TOTAL_SCREEN = 3;
+
     public static final int EXIT = 999;
 
     static void loadProperties() {
@@ -151,6 +153,8 @@ class Config {
         buttonsNumbers.put("Доходы", Config.INCOME_SCREEN);
         buttonsNumbers.put("Выручка от продаж", Config.INCOME_REVENUE);
         buttonsNumbers.put("Прочие доходы", Config.INCOME_OTHERREVENUE);
+
+        buttonsNumbers.put("Итого баланс", Config.TOTAL_SCREEN);
 
         System.out.println("Config for " + BOT_NAME + " loaded");
     }

@@ -78,6 +78,17 @@ public class Service {
         System.out.println("\nReading finished");
     }
 
+    public static List<List<Object>> readTotalSumsFromSheet(String sheetName, String sheetTab, String startCell, String targetRange)
+            throws IOException, GeneralSecurityException {
+        sheetsService = GoogleTools.getSheetsService();
+
+        String range = sheetTab + "!" + startCell + ":" + targetRange;
+        ValueRange response = sheetsService.spreadsheets().values()
+                .get(sheetName, range)
+                .execute();
+        return response.getValues();
+    }
+
     static List<Object> formatStringsForLog(Update update) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
@@ -173,7 +184,7 @@ public class Service {
         Config.fillingBudget = false;
         Config.waitingForContragent = false;
         for (int i = 0; i < Config.resultString.length; i++) {
-            Config.resultString[i] = "";
+            Config.resultString[i] = " ";
         }
         return new SendMessage().setChatId(chatId).setText("Спасибо за сотрудничество.");
     }
@@ -203,4 +214,36 @@ public class Service {
     }
 
 
+    public static SendMessage returnTotalSumms(long chatId) {
+
+        List<List<Object>> values = null;
+        double income = 0;
+        double expences = 0;
+
+        try {
+            // TODO getting UserID instead of ChatID ?
+            //   Config.getSheetNameByUserID((int) chatId),
+            values = readTotalSumsFromSheet(Config.SPREADSHEET_URL, "ДДС", "D3", "D");
+            for (List row : values) {
+                if (!row.get(0).equals(" "))
+                    income += Double.parseDouble(String.valueOf(row.get(0)).replace(',', '.'));
+            }
+
+            values = readTotalSumsFromSheet(Config.SPREADSHEET_URL, "ДДС", "E3", "E");
+            for (List row : values) {
+                if (!row.get(0).equals(" "))
+                    expences += Double.parseDouble(String.valueOf(row.get(0)).replace(',', '.'));
+            }
+
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+        String totalText = "Суммарно расход: ";
+        totalText += expences;
+        totalText += "\nСуммарно доход: ";
+        totalText += income;
+        totalText += "\nИтого баланс: ";
+        totalText += income - expences;
+        return new SendMessage().setChatId(chatId).setText(totalText);
+    }
 }

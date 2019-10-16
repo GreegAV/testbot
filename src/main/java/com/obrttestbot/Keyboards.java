@@ -75,6 +75,9 @@ public class Keyboards {
             case Config.INCOME_OTHERREVENUE: { // Entering summ
                 return Service.askForSumm(screenNumber, chatId);
             }
+            case Config.TOTAL_SCREEN: { // Total expences and profit
+                return Service.returnTotalSumms(chatId);
+            }
 
             default: {
                 return new SendMessage()
@@ -422,18 +425,22 @@ public class Keyboards {
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton04 = new InlineKeyboardButton();
         inlineKeyboardButton01.setText("Расходы");
         inlineKeyboardButton01.setCallbackData("Расходы");
         inlineKeyboardButton02.setText("Доходы");
         inlineKeyboardButton02.setCallbackData("Доходы");
         inlineKeyboardButton03.setText("Прекратить ввод");
         inlineKeyboardButton03.setCallbackData("Прекратить ввод");
+        inlineKeyboardButton04.setText("Итого баланс");
+        inlineKeyboardButton04.setCallbackData("Итого баланс");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
 
         keyboardButtonsRow01.add(inlineKeyboardButton01);
         keyboardButtonsRow01.add(inlineKeyboardButton02);
+        keyboardButtonsRow02.add(inlineKeyboardButton04);
         keyboardButtonsRow02.add(inlineKeyboardButton03);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
