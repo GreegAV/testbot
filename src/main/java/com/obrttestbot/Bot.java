@@ -112,6 +112,17 @@ public class Bot extends TelegramLongPollingBot {
                             }
                             break;
                         }
+                        // waiting for details of expences
+                        if (Config.enteringDetailsOfExpences) {
+                            Config.enteringDetailsOfExpences = false;
+                            Config.resultString[1] += "(" + update.getMessage().getText() + ")";
+                            try {
+                                execute(Service.askForSumm(Config.screenNumber, update.getMessage().getChatId()));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        }
                         //Nothing waiting, just log all conversation
                         if (!Config.fillingBudget) {
                             List<Object> listForLogging = Service.formatStringsForLog(update);
@@ -124,7 +135,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
             }
-        } else if (update.hasCallbackQuery()) { // обработка нажатий на кнопкиs
+        } else if (update.hasCallbackQuery()) { // обработка нажатий на кнопки
             try {
                 String messageFromTheButton = update.getCallbackQuery().getData();
                 Config.screenNumber = Config.buttonsNumbers.get(messageFromTheButton);

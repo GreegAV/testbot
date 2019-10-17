@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 class Config {
 
     private static final String BUNDLE_NAME = "config";
+
     static Map<String, Integer> buttonsNumbers = new HashMap<>();
     static Map<Integer, String> namesAndIDs = new HashMap<>();
     private static Config instance;
@@ -37,11 +38,15 @@ class Config {
     public static String SPREADSHEET_URL;
     public static int screenNumber = 0;
     public static int lastScreen = 0;
+
+    //   0      1           2          3       4      5        6          7
+    // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
     public static String[] resultString = new String[8];
 
     public static boolean enteringSumm = false;
     public static boolean fillingBudget = false;
     public static boolean waitingForContragent = false;
+    public static boolean enteringDetailsOfExpences = false;
 
     public static final int WELCOME_SCREEN = 0;
 

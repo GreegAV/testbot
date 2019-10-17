@@ -23,6 +23,10 @@ public class Keyboards {
                 return generateListOfIncomeButtons(chatId);
             }
 
+            case Config.EXPENSES_DIFFERENT: { // 10
+                return Service.askForDetailsOfExpences(screenNumber, chatId);
+            }
+
             case Config.EXPENSES_PERSONAL_SCREEN: { // 11
                 return generateListOfPersonalButtons(chatId);
             }
@@ -64,13 +68,12 @@ public class Keyboards {
             case Config.EXPENSES_MARKETING_CRM:
             case Config.EXPENSES_MARKETING_ENVATO:
             case Config.EXPENSES_MARKETING_TILDA:
-            case Config.EXPENSES_MARKETING_OTHER:
+//            case Config.EXPENSES_MARKETING_OTHER:
             case Config.EXPENSES_TAXES_ESV:
             case Config.EXPENSES_TAXES_NDFL:
             case Config.EXPENSES_TAXES_WAR:
             case Config.EXPENSES_TAXES_EDIN:
             case Config.EXPENSES_TAXES_VAT:
-            case Config.EXPENSES_DIFFERENT:
             case Config.INCOME_REVENUE:
             case Config.INCOME_OTHERREVENUE: { // Entering summ
                 return Service.askForSumm(screenNumber, chatId);
@@ -307,7 +310,7 @@ public class Keyboards {
 //        InlineKeyboardButton inlineKeyboardButton15 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton16 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton17 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton18 = new InlineKeyboardButton();
+//        InlineKeyboardButton inlineKeyboardButton18 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton999 = new InlineKeyboardButton();
 
         inlineKeyboardButton11.setText("Instagram");
@@ -322,8 +325,8 @@ public class Keyboards {
         inlineKeyboardButton16.setCallbackData("Envato");
         inlineKeyboardButton17.setText("Tilda");
         inlineKeyboardButton17.setCallbackData("Tilda");
-        inlineKeyboardButton18.setText("Прочее");
-        inlineKeyboardButton18.setCallbackData("Прочее");
+//        inlineKeyboardButton18.setText("Прочее");
+//        inlineKeyboardButton18.setCallbackData("Прочее");
         inlineKeyboardButton999.setText("Прекратить ввод");
         inlineKeyboardButton999.setCallbackData("Прекратить ввод");
 
@@ -342,7 +345,7 @@ public class Keyboards {
         keyboardButtonsRow13.add(inlineKeyboardButton16);
         keyboardButtonsRow13.add(inlineKeyboardButton17);
 
-        keyboardButtonsRow14.add(inlineKeyboardButton18);
+//        keyboardButtonsRow14.add(inlineKeyboardButton18);
         keyboardButtonsRow15.add(inlineKeyboardButton999);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
@@ -383,8 +386,8 @@ public class Keyboards {
         inlineKeyboardButton16.setCallbackData("Маркетинг");
         inlineKeyboardButton17.setText("Налоги");
         inlineKeyboardButton17.setCallbackData("Налоги");
-        inlineKeyboardButton18.setText("Прочее");
-        inlineKeyboardButton18.setCallbackData("Прочее");
+        inlineKeyboardButton18.setText("Другие расходы");
+        inlineKeyboardButton18.setCallbackData("Другие расходы");
         inlineKeyboardButton999.setText("Прекратить ввод");
         inlineKeyboardButton999.setCallbackData("Прекратить ввод");
 

@@ -112,13 +112,14 @@ public class Service {
         //add category of summ
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
             if (entry.getValue().equals(Config.lastScreen)) {
-                Config.resultString[1] = entry.getKey();
+                String tmp = Config.resultString[1];
+                Config.resultString[1] = entry.getKey() + tmp;
                 break;
             }
         }
 
         //add subcategory of summ
-        if (Config.lastScreen >= 100) {
+        if (Config.lastScreen >= 100 | Config.lastScreen == Config.EXPENSES_DIFFERENT) {
             for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
                 if (entry.getValue().equals(Config.lastScreen / 10)) {
                     Config.resultString[7] = entry.getKey();
@@ -140,7 +141,7 @@ public class Service {
         double incomeSumm = Math.abs(Double.parseDouble(inputSumm));
 
         // add type of summ
-        if (Config.lastScreen < 100) {
+        if (Config.lastScreen < 100 & Config.lastScreen != Config.EXPENSES_DIFFERENT) {
             Config.resultString[3] = String.valueOf(incomeSumm);
             Config.resultString[5] = String.valueOf(incomeSumm);
             Config.resultString[6] = "1. Доход";
@@ -245,5 +246,17 @@ public class Service {
         totalText += "\nИтого баланс: ";
         totalText += income - expences;
         return new SendMessage().setChatId(chatId).setText(totalText);
+    }
+
+    public static SendMessage askForDetailsOfExpences(int screenNumber, long chatId) {
+        Config.enteringDetailsOfExpences = true;
+        String category = "";
+        for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
+            if (entry.getValue().equals(screenNumber)) {
+                category = entry.getKey();
+                break;
+            }
+        }
+        return new SendMessage().setChatId(chatId).setText("Введите уточнение  для категории: " + category);
     }
 }
