@@ -9,10 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Service {
     private static Sheets sheetsService;
@@ -179,6 +176,11 @@ public class Service {
     }
 
     public static SendMessage cancelEnteringSumm(long chatId) {
+        resetToDefault();
+        return new SendMessage().setChatId(chatId).setText("Спасибо за сотрудничество.");
+    }
+
+    public static void resetToDefault() {
         Config.screenNumber = Config.WELCOME_SCREEN;
         Config.lastScreen = Config.WELCOME_SCREEN;
         Config.enteringSumm = false;
@@ -187,7 +189,6 @@ public class Service {
         for (int i = 0; i < Config.resultString.length; i++) {
             Config.resultString[i] = " ";
         }
-        return new SendMessage().setChatId(chatId).setText("Спасибо за сотрудничество.");
     }
 
     public static SendMessage askForSumm(int screenNumber, long chatId) {
@@ -216,35 +217,150 @@ public class Service {
 
 
     public static SendMessage returnTotalSumms(long chatId) {
+        class Record {
+            String date;
+            double income;
+            double expence;
 
+            public Record(String date, double income, double expence) {
+                this.date = date;
+                this.income = income;
+                this.expence = expence;
+            }
+
+            public String getDate() {
+                return date;
+            }
+
+            public void setDate(String date) {
+                this.date = date;
+            }
+
+            public double getIncome() {
+                return income;
+            }
+
+            public void setIncome(double income) {
+                this.income = income;
+            }
+
+            public double getExpence() {
+                return expence;
+            }
+
+            public void setExpence(double expence) {
+                this.expence = expence;
+            }
+
+            @Override
+            public String toString() {
+                return "Record{" + "date='" + date + ", income=" + income + ", expence=" + expence + '}';
+            }
+
+        }
+        Record[] records;
+        int numOfRecords;
         List<List<Object>> values = null;
         double income = 0;
         double expences = 0;
-
+        List<Record> listOfRecords = new ArrayList<>();
         try {
             // TODO getting UserID instead of ChatID ?
             //   Config.getSheetNameByUserID((int) chatId),
+
+            String currentDate = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
+            System.out.println(currentDate);
+
+            //getting dates
+            values = readTotalSumsFromSheet(Config.SPREADSHEET_URL, "ДДС", "A3", "A");
+            numOfRecords = values.size();
+            records = new Record[numOfRecords];
+            for (int i = 0; i < records.length; i++) {
+                records[i] = new Record("", 0, 0);
+                listOfRecords.add(new Record("", 0, 0));
+            }
+            int currentRecord = 0;
+            for (List row : values) {
+                records[currentRecord].date = String.valueOf(row.get(0));
+                Record record = listOfRecords.get(currentRecord);
+                listOfRecords.remove(currentRecord);
+                record.setDate(String.valueOf(row.get(0)));
+                listOfRecords.add(currentRecord, record);
+                currentRecord++;
+            }
+            // getting incomes
             values = readTotalSumsFromSheet(Config.SPREADSHEET_URL, "ДДС", "D3", "D");
+            currentRecord = 0;
             for (List row : values) {
-                if (!row.get(0).equals(" "))
+                Record record = listOfRecords.get(currentRecord);
+                listOfRecords.remove(currentRecord);
+                if (!row.get(0).equals(" ")) {
                     income += Double.parseDouble(String.valueOf(row.get(0)).replace(',', '.'));
+                    records[currentRecord].income = Double.parseDouble(String.valueOf(row.get(0)).replace(',', '.'));
+                    record.setIncome(Double.parseDouble(String.valueOf(row.get(0)).replace(',', '.')));
+                } else {
+                    record.setIncome(0);
+                    records[currentRecord].income = 0;
+                }
+                listOfRecords.add(currentRecord, record);
+                currentRecord++;
             }
 
+            //getting expences
             values = readTotalSumsFromSheet(Config.SPREADSHEET_URL, "ДДС", "E3", "E");
+            currentRecord = 0;
             for (List row : values) {
-                if (!row.get(0).equals(" "))
+                Record record = listOfRecords.get(currentRecord);
+                listOfRecords.remove(currentRecord);
+                if (!row.get(0).equals(" ")) {
                     expences += Double.parseDouble(String.valueOf(row.get(0)).replace(',', '.'));
+                    records[currentRecord].expence = Double.parseDouble(String.valueOf(row.get(0)).replace(',', '.'));
+                    record.setExpence(Double.parseDouble(String.valueOf(row.get(0)).replace(',', '.')));
+                } else {
+                    record.setExpence(0);
+                    records[currentRecord].expence = 0;
+                }
+                listOfRecords.add(currentRecord, record);
+                currentRecord++;
             }
-
+//            for (Record rec : listOfRecords) {
+//                System.out.println("Date: "+rec.getDate());
+//                System.out.println("Income: "+rec.getIncome());
+//                System.out.println("Expence: "+rec.getExpence());
+//            }
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
+
         String totalText = "Суммарно расход: ";
         totalText += expences;
         totalText += "\nСуммарно доход: ";
         totalText += income;
         totalText += "\nИтого баланс: ";
         totalText += income - expences;
+        totalText += "\n\n";
+        double currIncome = listOfRecords.get(0).getIncome();
+        double currExp = listOfRecords.get(0).getExpence();
+        String currDate = listOfRecords.get(0).getDate();
+        for (int i = 1; i < listOfRecords.size(); i++) {
+            Record rec = listOfRecords.get(i);
+            if (currDate.equals(rec.getDate())) {
+                currExp += rec.getExpence();
+                currIncome += rec.getIncome();
+            } else {
+                totalText += "Date: " + currDate + "\t\t\t";
+                totalText += "Total income: " + currIncome + "\t\t\t";
+                totalText += "Total expences: " + currExp + "\n";
+                currIncome = rec.getIncome();
+                currExp = rec.getExpence();
+                currDate = rec.getDate();
+            }
+
+        }
+        totalText += "Date: " + currDate + "\t\t\t";
+        totalText += "Total income: " + currIncome + "\t\t\t";
+        totalText += "Total expences: " + currExp + "\n";
+        Service.resetToDefault();
         return new SendMessage().setChatId(chatId).setText(totalText);
     }
 
