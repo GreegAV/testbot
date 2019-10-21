@@ -23,6 +23,88 @@ public class Bot extends TelegramLongPollingBot {
         if (update.hasMessage()) {
             long chat_id = message.getChatId();
 //            long user_id = user.getId();
+            if (!message.hasText()) {
+                try {
+                    execute(new SendMessage()
+                            .setChatId(chat_id)
+                            .setText("Бот не принимает этот тип сообщений. Только текст."));
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+//            if (message.hasAnimation()) {
+//                try {
+//                    execute(new SendMessage()
+//                            .setChatId(chat_id)
+//                            .setText("Бот не принимает соообщения в виде анимации."));
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (message.hasAudio()) {
+//                try {
+//                    execute(new SendMessage()
+//                            .setChatId(chat_id)
+//                            .setText("Бот не принимает аудиосообщения."));
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (message.hasVoice()) {
+//                try {
+//                    execute(new SendMessage()
+//                            .setChatId(chat_id)
+//                            .setText("Бот не принимает аудиосообщения."));
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (message.hasPhoto()) {
+//                try {
+//                    execute(new SendMessage()
+//                            .setChatId(chat_id)
+//                            .setText("Бот не принимает фото."));
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (message.hasDocument()) {
+//                try {
+//                    execute(new SendMessage()
+//                            .setChatId(chat_id)
+//                            .setText("Бот не принимает пока документы."));
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (message.hasVideo()) {
+//                try {
+//                    execute(new SendMessage()
+//                            .setChatId(chat_id)
+//                            .setText("Бот не принимает видео."));
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (message.hasVideoNote()) {
+//                try {
+//                    execute(new SendMessage()
+//                            .setChatId(chat_id)
+//                            .setText("Бот не принимает видео."));
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (message.hasSticker()) {
+//                try {
+//                    execute(new SendMessage()
+//                            .setChatId(chat_id)
+//                            .setText("Бот не понимает стикеры."));
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+
             if (message.hasText()) {
                 String firstWord;
                 if (message.getText().indexOf(" ") > 0) {

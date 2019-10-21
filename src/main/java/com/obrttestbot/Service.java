@@ -269,7 +269,6 @@ public class Service {
             //   Config.getSheetNameByUserID((int) chatId),
 
             String currentDate = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
-            System.out.println(currentDate);
 
             //getting dates
             values = readTotalSumsFromSheet(Config.SPREADSHEET_URL, "ДДС", "A3", "A");
@@ -323,11 +322,6 @@ public class Service {
                 listOfRecords.add(currentRecord, record);
                 currentRecord++;
             }
-//            for (Record rec : listOfRecords) {
-//                System.out.println("Date: "+rec.getDate());
-//                System.out.println("Income: "+rec.getIncome());
-//                System.out.println("Expence: "+rec.getExpence());
-//            }
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
