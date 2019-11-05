@@ -4,6 +4,7 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
@@ -175,9 +176,9 @@ public class Service {
         return stringBuilder.toString();
     }
 
-    public static SendMessage cancelEnteringSumm(long chatId) {
+    public static SendMessage cancelEnteringSumm(Update update) {
         resetToDefault();
-        return new SendMessage().setChatId(chatId).setText("Спасибо за сотрудничество.");
+        return new SendMessage().setChatId(getChatId(update)).setText("Спасибо за сотрудничество.");
     }
 
     public static void resetToDefault() {
@@ -191,7 +192,7 @@ public class Service {
         }
     }
 
-    public static SendMessage askForSumm(int screenNumber, long chatId) {
+    public static EditMessageText askForSumm(int screenNumber, Update update) {
         Config.screenNumber = -1;
         Config.lastScreen = screenNumber;
         Config.enteringSumm = true;
@@ -203,7 +204,12 @@ public class Service {
                 break;
             }
         }
-        return new SendMessage().setChatId(chatId).setText("Введите сумму для категории: " + category);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Введите сумму для категории: " + category)
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update));
+        return editMessageText;
     }
 
     public static void logToSheets(List<Object> stringsToLog, String sheetName) {
@@ -215,8 +221,7 @@ public class Service {
         }
     }
 
-
-    public static SendMessage returnTotalSumms(long chatId) {
+    public static EditMessageText returnTotalSumms(Update update) {
         class Record {
             String date;
             double income;
@@ -355,10 +360,14 @@ public class Service {
         totalText += "Total income: " + currIncome + "\t\t\t";
         totalText += "Total expences: " + currExp + "\n";
         Service.resetToDefault();
-        return new SendMessage().setChatId(chatId).setText(totalText);
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText(totalText)
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update));
+        return editMessageText;
     }
 
-    public static SendMessage askForDetailsOfExpences(int screenNumber, long chatId) {
+    public static EditMessageText askForDetailsOfExpences(int screenNumber, Update update) {
         Config.enteringDetailsOfExpences = true;
         String category = "";
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
@@ -367,6 +376,31 @@ public class Service {
                 break;
             }
         }
-        return new SendMessage().setChatId(chatId).setText("Введите уточнение  для категории: " + category);
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Введите уточнение  для категории: " + category)
+                .setChatId(getChatId(update))
+                .setMessageId(update.getMessage().getMessageId());
+
+        return editMessageText;
+    }
+
+    public static long getChatId(Update update) {
+        Long chat_id;
+        if (update.hasCallbackQuery()) {
+            chat_id = update.getCallbackQuery().getMessage().getChatId();
+        } else {
+            chat_id = update.getMessage().getChatId();
+        }
+        return chat_id;
+    }
+
+    public static int getMessageId(Update update) {
+        Integer message_id;
+        if (update.hasCallbackQuery()) {
+            message_id = update.getCallbackQuery().getMessage().getMessageId();
+        } else {
+            message_id = update.getMessage().getMessageId();
+        }
+        return message_id;
     }
 }

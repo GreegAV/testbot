@@ -1,54 +1,60 @@
 package com.obrttestbot;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.obrttestbot.Service.getChatId;
+import static com.obrttestbot.Service.getMessageId;
+
 public class Keyboards {
 
-    public static SendMessage sendInlineKeyBoardMessage(long chatId, int screenNumber) {
+    public static EditMessageText sendInlineKeyBoardMessage(Update update, int screenNumber) {
+
         switch (screenNumber) {
-            case Config.WELCOME_SCREEN: {    // 0
-                return generateWelcomeButtons(chatId);
-            }
+//            case Config.WELCOME_SCREEN: {    // 0
+//                return generateWelcomeButtons(update);
+//            }
 
             case Config.EXPENSES_SCREEN: {  // 1
-                return generateListOfExpencesButtons(chatId);
+                return generateListOfExpencesButtons(update);
             }
 
             case Config.INCOME_SCREEN: { // 2
-                return generateListOfIncomeButtons(chatId);
+                return generateListOfIncomeButtons(update);
             }
 
             case Config.EXPENSES_DIFFERENT: { // 10
-                return Service.askForDetailsOfExpences(screenNumber, chatId);
+                return Service.askForDetailsOfExpences(screenNumber, update);
             }
 
             case Config.EXPENSES_PERSONAL_SCREEN: { // 11
-                return generateListOfPersonalButtons(chatId);
+                return generateListOfPersonalButtons(update);
             }
 
             case Config.EXPENSES_HOUSEHOLD_SCREEN: { // 12
-                return generateListOfHouseholdButtons(chatId);
+                return generateListOfHouseholdButtons(update);
             }
 
             case Config.EXPENSES_COMMUNAL_SCREEN: { // 13
-                return generateListOfCommunalButtons(chatId);
+                return generateListOfCommunalButtons(update);
             }
 
             case Config.EXPENSES_OFFICE_SCREEN: { // 14
-                return generateListOfOfficeButtons(chatId);
+                return generateListOfOfficeButtons(update);
             }
 
             case Config.EXPENSES_MARKETING_SCREEN: { // 16
-                return generateListOfMarketingButtons(chatId);
+                return generateListOfMarketingButtons(update);
             }
 
             case Config.EXPENSES_TAXES_SCREEN: { // 17
-                return generateListOfTaxesButtons(chatId);
+                return generateListOfTaxesButtons(update);
             }
 
             case Config.EXPENSES_PERSONAL_SALARY:
@@ -76,22 +82,24 @@ public class Keyboards {
             case Config.EXPENSES_TAXES_VAT:
             case Config.INCOME_REVENUE:
             case Config.INCOME_OTHERREVENUE: { // Entering summ
-                return Service.askForSumm(screenNumber, chatId);
+                return Service.askForSumm(screenNumber, update);
             }
             case Config.TOTAL_SCREEN: { // Total expences and profit
-                return Service.returnTotalSumms(chatId);
+                return Service.returnTotalSumms(update);
             }
 
             default: {
-                return new SendMessage()
-                        .setChatId(chatId)
-                        .setText("Передайте это число разработчику: " + String.valueOf(Config.screenNumber));
+                EditMessageText editMessageText = new EditMessageText();
+                editMessageText.setText("Передайте это число разработчику: " + String.valueOf(Config.screenNumber))
+                        .setChatId(getChatId(update))
+                        .setMessageId(getMessageId(update));
+                return editMessageText;
             }
         }
     }
 
-    private static SendMessage generateListOfCommunalButtons(long chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup0 = new InlineKeyboardMarkup();
+    private static EditMessageText generateListOfCommunalButtons(Update update) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
@@ -126,12 +134,18 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow02);
         rowList.add(keyboardButtonsRow03);
 
-        inlineKeyboardMarkup0.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup0);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Выберите подкатегорию.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessageText;
     }
 
-    private static SendMessage generateListOfTaxesButtons(long chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup0 = new InlineKeyboardMarkup();
+    private static EditMessageText generateListOfTaxesButtons(Update update) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
@@ -170,11 +184,17 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow02);
         rowList.add(keyboardButtonsRow03);
 
-        inlineKeyboardMarkup0.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup0);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Выберите подкатегорию.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessageText;
     }
 
-    private static SendMessage generateListOfHouseholdButtons(long chatId) {
+    private static EditMessageText generateListOfHouseholdButtons(Update update) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
@@ -207,10 +227,17 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow03);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Выберите подкатегорию.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessageText;
     }
 
-    private static SendMessage generateListOfOfficeButtons(long chatId) {
+    private static EditMessageText generateListOfOfficeButtons(Update update) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
@@ -238,10 +265,17 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow03);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup);
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Выберите подкатегорию.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessageText;
     }
 
-    private static SendMessage generateListOfPersonalButtons(long chatId) {
+    private static EditMessageText generateListOfPersonalButtons(Update update) {
+
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
@@ -267,10 +301,16 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow02);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup);
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Выберите подкатегорию.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+        return editMessageText;
     }
 
-    private static SendMessage generateListOfIncomeButtons(long chatId) {
+    private static EditMessageText generateListOfIncomeButtons(Update update) {
+
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
@@ -297,10 +337,18 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow03);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите категорию доходов.").setReplyMarkup(inlineKeyboardMarkup);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Выберите категорию расходов.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessageText;
     }
 
-    private static SendMessage generateListOfMarketingButtons(long chatId) {
+    private static EditMessageText generateListOfMarketingButtons(Update update) {
+
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton11 = new InlineKeyboardButton();
@@ -356,10 +404,17 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow15);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите подкатегорию.").setReplyMarkup(inlineKeyboardMarkup);
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Выберите подкатегорию.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessageText;
     }
 
-    private static SendMessage generateListOfExpencesButtons(long chatId) {
+    private static EditMessageText generateListOfExpencesButtons(Update update) {
+
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton11 = new InlineKeyboardButton();
@@ -419,10 +474,18 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow15);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите категорию расходов.").setReplyMarkup(inlineKeyboardMarkup);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Выберите категорию расходов.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessageText;
     }
 
-    private static SendMessage generateWelcomeButtons(long chatId) {
+    public static SendMessage generateWelcomeButtons(Update update) {
+
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
@@ -451,6 +514,12 @@ public class Keyboards {
         rowList.add(keyboardButtonsRow02);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
-        return new SendMessage().setChatId(chatId).setText("Выберите действие.").setReplyMarkup(inlineKeyboardMarkup);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText(update.getMessage().getText())
+                .setChatId(getChatId(update))
+                .setReplyMarkup(inlineKeyboardMarkup);
+
+        return sendMessage;
     }
 }
