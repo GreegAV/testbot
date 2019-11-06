@@ -30,7 +30,8 @@ public class Keyboards {
             }
 
             case Config.EXPENSES_DIFFERENT: { // 10
-                return Service.askForDetailsOfExpences(screenNumber, update);
+//                return Service.askForDetailsOfExpences(screenNumber, update);
+                return Service.askForDetailsOfExpences(update);
             }
 
             case Config.EXPENSES_PERSONAL_SCREEN: { // 11

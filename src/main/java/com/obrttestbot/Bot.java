@@ -15,16 +15,14 @@ import java.util.Date;
 import java.util.List;
 
 import static com.obrttestbot.Service.getChatId;
+import static com.obrttestbot.Service.resetToDefault;
 
 public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-
         if (update.hasMessage()) {
-//            long chat_id = message.getChatId();
-//            long user_id = user.getId();
             if (message.hasDocument()) {
                 System.out.println("getFileName " + message.getDocument().toString());
 //                if (message.getDocument().getMimeType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
@@ -138,6 +136,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     case "/cashflow@OBRTTestBot":
                     case "/cashflow": {
+                        resetToDefault();
                         try {
                             if (!Config.enteringSumm) {
 //                                execute(Keyboards.sendInlineKeyBoardMessage(update, Config.WELCOME_SCREEN));
@@ -177,16 +176,15 @@ public class Bot extends TelegramLongPollingBot {
                             if (!Service.isNumeric(message.getText())) {
                                 try {
                                     Config.screenNumber = Config.lastScreen;
-                                    Config.enteringSumm = true;
                                     execute(Service.askForSumm(Config.screenNumber, update));
                                 } catch (TelegramApiException e) {
                                     e.printStackTrace();
                                 }
                             } else {
                                 Service.prepareResultString(update);
-                                Config.waitingForContragent = true;
-                                Config.enteringSumm = false;
                                 try {
+                                    Config.waitingForContragent = true;
+                                    Config.enteringSumm = false;
                                     execute(new SendMessage().setChatId(getChatId(update)).setText("Укажите контрагента."));
                                 } catch (TelegramApiException e) {
                                     e.printStackTrace();
@@ -198,8 +196,9 @@ public class Bot extends TelegramLongPollingBot {
                         if (Config.waitingForContragent) {
                             //add name of author of operation
                             Config.resultString[2] = update.getMessage().getText();
+                            Config.resultString[7] = Config.resultString[1];
                             Service.logToSheets(Arrays.asList(Config.resultString), "ДДС");
-                            jokesAboutSumm(update);
+//                            jokesAboutSumm(update);
                             try {
                                 execute(Service.cancelEnteringSumm(update));
                             } catch (TelegramApiException e) {
@@ -211,12 +210,14 @@ public class Bot extends TelegramLongPollingBot {
                         if (Config.enteringDetailsOfExpences) {
                             Config.enteringDetailsOfExpences = false;
                             Config.resultString[1] += "(" + update.getMessage().getText() + ")";
+
                             try {
-                                execute(Service.askForSumm(Config.screenNumber, update));
+                                execute(Service.askForSummAfterDetailsOfExpences(Config.screenNumber, update));
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
                             break;
+
                         }
                         //Nothing waiting, just log all conversation
                         if (!Config.fillingBudget) {
@@ -250,22 +251,22 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void jokesAboutSumm(Update update) {
-        int incomeSumm = (int) Math.abs(Double.parseDouble(Config.resultString[5].replace(',', '.')));
-        String greetText;
+        int summForJokes = (int) Math.abs(Double.parseDouble(Config.resultString[5].replace(',', '.')));
+        String jokeText;
         if (Config.lastScreen == Config.INCOME_REVENUE | Config.lastScreen == Config.INCOME_OTHERREVENUE) {
-            if (incomeSumm > 10000) {
-                greetText = "Отлично сработано. Всегда бы так!";
-            } else
-                greetText = "Маловато будет...";
+            if (summForJokes > 10000)
+                jokeText = "Отлично сработано. Всегда бы так!";
+            else
+                jokeText = "Маловато будет...";
         } else {
-            if (incomeSumm > 5000) {
-                greetText = "Сплошные убытки! Мы так самолёт не купим!";
-            } else
-                greetText = "К сожалению, иногда, расходы неизбежны";
+            if (summForJokes > 5000)
+                jokeText = "Сплошные убытки! Мы так самолёт не купим!";
+            else
+                jokeText = "К сожалению, иногда, расходы неизбежны";
         }
         SendMessage messg = new SendMessage()
                 .setChatId(getChatId(update))
-                .setText(greetText);
+                .setText(jokeText);
         try {
             execute(messg);
         } catch (TelegramApiException e) {
