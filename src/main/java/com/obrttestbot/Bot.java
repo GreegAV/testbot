@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static com.obrttestbot.Service.getChatId;
+
 public class Bot extends TelegramLongPollingBot {
 
     @Override
@@ -21,7 +23,7 @@ public class Bot extends TelegramLongPollingBot {
         Message message = update.getMessage();
 
         if (update.hasMessage()) {
-            long chat_id = message.getChatId();
+//            long chat_id = message.getChatId();
 //            long user_id = user.getId();
             if (message.hasDocument()) {
                 System.out.println("getFileName " + message.getDocument().toString());
@@ -44,7 +46,7 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasAnimation()) {
                 try {
                     execute(new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(getChatId(update))
                             .setText("Бот не принимает соообщения в виде анимации."));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -53,7 +55,7 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasAudio()) {
                 try {
                     execute(new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(getChatId(update))
                             .setText("Бот не принимает аудиосообщения."));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -62,7 +64,7 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasVoice()) {
                 try {
                     execute(new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(getChatId(update))
                             .setText("Бот не принимает аудиосообщения."));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -71,7 +73,7 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasPhoto()) {
                 try {
                     execute(new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(getChatId(update))
                             .setText("Бот не принимает фото."));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -80,7 +82,7 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasDocument()) {
                 try {
                     execute(new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(getChatId(update))
                             .setText("Бот не принимает пока документы."));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -89,7 +91,7 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasVideo()) {
                 try {
                     execute(new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(getChatId(update))
                             .setText("Бот не принимает видео."));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -98,7 +100,7 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasVideoNote()) {
                 try {
                     execute(new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(getChatId(update))
                             .setText("Бот не принимает видео."));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -107,7 +109,7 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasSticker()) {
                 try {
                     execute(new SendMessage()
-                            .setChatId(chat_id)
+                            .setChatId(getChatId(update))
                             .setText("Бот не понимает стикеры."));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -125,7 +127,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "/time@OBRTTestBot":
                     case "/time": {
                         SendMessage messg = new SendMessage()
-                                .setChatId(chat_id)
+                                .setChatId(getChatId(update))
                                 .setText(new Date().toString());
                         try {
                             execute(messg);
@@ -160,7 +162,7 @@ public class Bot extends TelegramLongPollingBot {
                         Service.logToSheets(Arrays.asList(ident), "Ident");
                         try {
                             SendMessage msg = new SendMessage()
-                                    .setChatId(chat_id)
+                                    .setChatId(getChatId(update))
                                     .setText("Idented");
                             execute(msg);
                         } catch (Exception e) {
@@ -185,7 +187,7 @@ public class Bot extends TelegramLongPollingBot {
                                 Config.waitingForContragent = true;
                                 Config.enteringSumm = false;
                                 try {
-                                    execute(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Укажите контрагента."));
+                                    execute(new SendMessage().setChatId(getChatId(update)).setText("Укажите контрагента."));
                                 } catch (TelegramApiException e) {
                                     e.printStackTrace();
                                 }
@@ -262,7 +264,7 @@ public class Bot extends TelegramLongPollingBot {
                 greetText = "К сожалению, иногда, расходы неизбежны";
         }
         SendMessage messg = new SendMessage()
-                .setChatId(update.getMessage().getChatId())
+                .setChatId(getChatId(update))
                 .setText(greetText);
         try {
             execute(messg);
