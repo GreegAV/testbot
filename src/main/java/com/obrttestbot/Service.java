@@ -379,7 +379,7 @@ public class Service {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setText("Введите уточнение  для категории: " + category)
                 .setChatId(getChatId(update))
-                .setMessageId(update.getMessage().getMessageId());
+                .setMessageId(getMessageId(update));
 
         return editMessageText;
     }
