@@ -97,12 +97,12 @@ class Config {
     public static final int EXIT = 999;
 
     static void loadProperties() {
-        namesAndIDs.put(221816696, "OBRT");
-        namesAndIDs.put(269463036, "ДНК ЭДЖЕНСИ");
-        namesAndIDs.put(224606811, "ДНК ЭДЖЕНСИ");
-        namesAndIDs.put(548498472, "ДНК ЭДЖЕНСИ");
-        namesAndIDs.put(515273686, "Алла");
-        namesAndIDs.put(148370030, "ДНК ЭДЖЕНСИ");
+        namesAndIDs.put(221816696, "OBRT");         // GreegAV
+        namesAndIDs.put(269463036, "ДНК ЭДЖЕНСИ");  //  dma_k
+        namesAndIDs.put(224606811, "ДНК ЭДЖЕНСИ");  // Анастасия
+        namesAndIDs.put(548498472, "ДНК ЭДЖЕНСИ");  // Росочинская
+        namesAndIDs.put(515273686, "Алла");         // Алла
+        namesAndIDs.put(148370030, "ДНК ЭДЖЕНСИ");  // Батова
 
         for (int i = 0; i < 8; i++) {
             resultString[i] = " ";
@@ -118,7 +118,7 @@ class Config {
         buttonsNumbers.put("Прекратить ввод", Config.EXIT);
         buttonsNumbers.put("Расходы", Config.EXPENSES_SCREEN);
 
-        buttonsNumbers.put("На персонал", Config.EXPENSES_PERSONAL_SCREEN);
+        buttonsNumbers.put("Персонал", Config.EXPENSES_PERSONAL_SCREEN);
         buttonsNumbers.put("Зарплата", Config.EXPENSES_PERSONAL_SALARY);
         buttonsNumbers.put("Обучение", Config.EXPENSES_PERSONAL_STUDY);
 
@@ -127,17 +127,17 @@ class Config {
         buttonsNumbers.put("Ремонты", Config.EXPENSES_HOUSEHOLD_REPAIR);
         buttonsNumbers.put("Хозтовары", Config.EXPENSES_HOUSEHOLD_GOODS);
 
-        buttonsNumbers.put("Коммуналка", Config.EXPENSES_COMMUNAL_SCREEN);
+        buttonsNumbers.put("Коммунальные", Config.EXPENSES_COMMUNAL_SCREEN);
         buttonsNumbers.put("Аренда", Config.EXPENSES_COMMUNAL_RENT);
         buttonsNumbers.put("Электричество", Config.EXPENSES_COMMUNAL_ELECTRICITY);
         buttonsNumbers.put("Вода", Config.EXPENSES_COMMUNAL_WATER);
         buttonsNumbers.put("Обслуживание", Config.EXPENSES_COMMUNAL_SERVICE);
 
-        buttonsNumbers.put("Офис", Config.EXPENSES_OFFICE_SCREEN);
+        buttonsNumbers.put("Офисные", Config.EXPENSES_OFFICE_SCREEN);
         buttonsNumbers.put("Канцтовары", Config.EXPENSES_OFFICE_STATIONARY);
         buttonsNumbers.put("Связь", Config.EXPENSES_OFFICE_CONNECTION);
 
-        buttonsNumbers.put("Маркетинг", Config.EXPENSES_MARKETING_SCREEN);
+        buttonsNumbers.put("Маркетинговые", Config.EXPENSES_MARKETING_SCREEN);
         buttonsNumbers.put("Instagram", Config.EXPENSES_MARKETING_INSTAGRAMM);
         buttonsNumbers.put("Google", Config.EXPENSES_MARKETING_GOOGLE);
         buttonsNumbers.put("Facebook", Config.EXPENSES_MARKETING_FACEBOOK);

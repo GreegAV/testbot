@@ -428,18 +428,18 @@ public class Keyboards {
         InlineKeyboardButton inlineKeyboardButton18 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton999 = new InlineKeyboardButton();
 
-        inlineKeyboardButton11.setText("На персонал");
-        inlineKeyboardButton11.setCallbackData("На персонал");
+        inlineKeyboardButton11.setText("Персонал");
+        inlineKeyboardButton11.setCallbackData("Персонал");
         inlineKeyboardButton12.setText("Хозяйственные");
         inlineKeyboardButton12.setCallbackData("Хозяйственные");
-        inlineKeyboardButton13.setText("Коммуналка");
-        inlineKeyboardButton13.setCallbackData("Коммуналка");
-        inlineKeyboardButton14.setText("Офис");
-        inlineKeyboardButton14.setCallbackData("Офис");
+        inlineKeyboardButton13.setText("Коммунальные");
+        inlineKeyboardButton13.setCallbackData("Коммунальные");
+        inlineKeyboardButton14.setText("Офисные");
+        inlineKeyboardButton14.setCallbackData("Офисные");
 //        inlineKeyboardButton15.setText("Сервис");
 //        inlineKeyboardButton15.setCallbackData("Сервис");
-        inlineKeyboardButton16.setText("Маркетинг");
-        inlineKeyboardButton16.setCallbackData("Маркетинг");
+        inlineKeyboardButton16.setText("Маркетинговые");
+        inlineKeyboardButton16.setCallbackData("Маркетинговые");
         inlineKeyboardButton17.setText("Налоги");
         inlineKeyboardButton17.setCallbackData("Налоги");
         inlineKeyboardButton18.setText("Другие расходы");
