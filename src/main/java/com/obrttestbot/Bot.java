@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.obrttestbot.Service.getChatId;
+import static com.obrttestbot.Service.getMessageId;
+import static com.obrttestbot.Service.resetToDefault;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -194,8 +196,11 @@ public class Bot extends TelegramLongPollingBot {
                                 Config.enteringSumm = false;
                                 Service.prepareResultString(update);
                                 Service.logToSheets(Arrays.asList(Config.resultString), "ДДС");
+                                resetToDefault();
                                 try {
-                                    execute(Service.cancelEnteringSumm(update));
+                                    execute(new SendMessage()
+                                            .setChatId(getChatId(update))
+                                            .setText("Спасибо за сотрудничество."));
                                 } catch (TelegramApiException e) {
                                     e.printStackTrace();
                                 }
@@ -218,7 +223,10 @@ public class Bot extends TelegramLongPollingBot {
                             Config.enteringDetailsOfExpences = false;
                             Config.resultString[1] += "(" + update.getMessage().getText() + ")";
                             try {
-                                execute(Service.askForSumm(update));
+                                Config.waitingForContragent = true;
+                                Config.fillingBudget = true;
+                                Config.screenNumber = -1;
+                                execute(new SendMessage().setText("Укажите контрагента.").setChatId(getChatId(update)));
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
@@ -239,13 +247,6 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 String messageFromTheButton = update.getCallbackQuery().getData();
                 Config.screenNumber = Config.buttonsNumbers.get(messageFromTheButton);
-//                if (Config.screenNumber < 100 & Config.screenNumber > 0) {
-//                    execute(Keyboards.sendInlineKeyBoardMessage(update, Config.screenNumber));
-//                } else if (Config.screenNumber != Config.EXIT) {
-//                    execute(Service.askForContragent(update));
-//                } else {
-//                    execute(Service.cancelEnteringSumm(update));
-//                }
                 if (Config.screenNumber != Config.EXIT) {
                     execute(Keyboards.sendInlineKeyBoardMessage(update, Config.screenNumber));
                 } else {

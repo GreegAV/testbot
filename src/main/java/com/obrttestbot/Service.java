@@ -176,9 +176,13 @@ public class Service {
         return stringBuilder.toString();
     }
 
-    public static SendMessage cancelEnteringSumm(Update update) {
+    public static EditMessageText cancelEnteringSumm(Update update) {
         resetToDefault();
-        return new SendMessage().setChatId(getChatId(update)).setText("Спасибо за сотрудничество.");
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Спасибо за сотрудничество.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update));
+        return editMessageText;
     }
 
     public static void resetToDefault() {
@@ -193,7 +197,6 @@ public class Service {
     }
 
     public static SendMessage askForSumm(Update update) {
-        Config.screenNumber = -1;
         Config.enteringSumm = true;
         String category = "";
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
