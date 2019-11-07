@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.obrttestbot.Service.getChatId;
-import static com.obrttestbot.Service.resetToDefault;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -122,6 +121,18 @@ public class Bot extends TelegramLongPollingBot {
                     firstWord = message.getText();
                 }
                 switch (firstWord) {
+                    case "/start@OBRTTestBot":
+                    case "/start": {
+                        SendMessage messg = new SendMessage()
+                                .setChatId(getChatId(update))
+                                .setText("Welcome. Когда-то тут будет инструкция.");
+                        try {
+                            execute(messg);
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
                     case "/time@OBRTTestBot":
                     case "/time": {
                         SendMessage messg = new SendMessage()
@@ -136,12 +147,12 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     case "/cashflow@OBRTTestBot":
                     case "/cashflow": {
-                        resetToDefault();
+                        Service.resetToDefault();
                         try {
-                            if (!Config.enteringSumm) {
+//                            if (!Config.enteringSumm) {
 //                                execute(Keyboards.sendInlineKeyBoardMessage(update, Config.WELCOME_SCREEN));
-                                execute(Keyboards.generateWelcomeButtons(update));
-                            }
+                            execute(Keyboards.generateWelcomeButtons(update));
+//                            }
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -175,32 +186,28 @@ public class Bot extends TelegramLongPollingBot {
                         if (Config.enteringSumm) {
                             if (!Service.isNumeric(message.getText())) {
                                 try {
-                                    Config.screenNumber = Config.lastScreen;
-                                    execute(Service.askForSumm(Config.screenNumber, update));
+                                    execute(Service.askForSumm(update));
                                 } catch (TelegramApiException e) {
                                     e.printStackTrace();
                                 }
                             } else {
+                                Config.enteringSumm = false;
                                 Service.prepareResultString(update);
+                                Service.logToSheets(Arrays.asList(Config.resultString), "ДДС");
                                 try {
-                                    Config.waitingForContragent = true;
-                                    Config.enteringSumm = false;
-                                    execute(new SendMessage().setChatId(getChatId(update)).setText("Укажите контрагента."));
+                                    execute(Service.cancelEnteringSumm(update));
                                 } catch (TelegramApiException e) {
                                     e.printStackTrace();
                                 }
-                                break;
                             }
+                            break;
                         }
-                        //summ entered, waiting for the Contragent
+                        //waiting for the contragent
                         if (Config.waitingForContragent) {
-                            //add name of author of operation
+                            Config.waitingForContragent = false;
                             Config.resultString[2] = update.getMessage().getText();
-                            Config.resultString[7] = Config.resultString[1];
-                            Service.logToSheets(Arrays.asList(Config.resultString), "ДДС");
-//                            jokesAboutSumm(update);
                             try {
-                                execute(Service.cancelEnteringSumm(update));
+                                execute(Service.askForSumm(update));
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
@@ -210,22 +217,19 @@ public class Bot extends TelegramLongPollingBot {
                         if (Config.enteringDetailsOfExpences) {
                             Config.enteringDetailsOfExpences = false;
                             Config.resultString[1] += "(" + update.getMessage().getText() + ")";
-
                             try {
-                                execute(Service.askForSummAfterDetailsOfExpences(Config.screenNumber, update));
+                                execute(Service.askForSumm(update));
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
                             break;
-
                         }
                         //Nothing waiting, just log all conversation
-                        if (!Config.fillingBudget) {
+                        if (!Config.fillingBudget | !Config.enteringSumm | !Config.waitingForContragent) {
                             List<Object> listForLogging = Service.formatStringsForLog(update);
                             Service.logToSheets(listForLogging, "General");
-
-                            String sheetNameByUserID = Config.getSheetNameByUserID(update.getMessage().getFrom().getId());
-                            Service.logToSheets(listForLogging, sheetNameByUserID);
+//                            String sheetNameByUserID = Config.getSheetNameByUserID(update.getMessage().getFrom().getId());
+//                            Service.logToSheets(listForLogging, sheetNameByUserID);
                         }
                         break;
                     }
@@ -235,11 +239,15 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 String messageFromTheButton = update.getCallbackQuery().getData();
                 Config.screenNumber = Config.buttonsNumbers.get(messageFromTheButton);
-
-                if (Config.screenNumber < 100 & Config.screenNumber > 0) {
+//                if (Config.screenNumber < 100 & Config.screenNumber > 0) {
+//                    execute(Keyboards.sendInlineKeyBoardMessage(update, Config.screenNumber));
+//                } else if (Config.screenNumber != Config.EXIT) {
+//                    execute(Service.askForContragent(update));
+//                } else {
+//                    execute(Service.cancelEnteringSumm(update));
+//                }
+                if (Config.screenNumber != Config.EXIT) {
                     execute(Keyboards.sendInlineKeyBoardMessage(update, Config.screenNumber));
-                } else if (Config.screenNumber != Config.EXIT) {
-                    execute(Service.askForSumm(Config.screenNumber, update));
                 } else {
                     execute(Service.cancelEnteringSumm(update));
                 }

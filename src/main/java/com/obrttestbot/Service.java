@@ -102,10 +102,9 @@ public class Service {
         // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
 
         //add date of operation
-        Config.resultString[0] = date;
+        Config.resultString[0] = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
 
         //add category of summ
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
@@ -152,8 +151,9 @@ public class Service {
 
     static boolean isNumeric(String str) {
         String tmp = str.replace(',', '.');
-        tmp = tmp.replace(" ", "");
-
+        tmp = tmp.replace(" ", "")
+                .replace("+", "")
+                .replace("-", "");
         if (tmp.indexOf('.') != tmp.lastIndexOf('.'))
             return false;
         return tmp.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
@@ -192,40 +192,31 @@ public class Service {
         }
     }
 
-    public static EditMessageText askForSumm(int screenNumber, Update update) {
+    public static SendMessage askForSumm(Update update) {
         Config.screenNumber = -1;
-        Config.lastScreen = screenNumber;
         Config.enteringSumm = true;
-        Config.fillingBudget = true;
         String category = "";
         for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
-            if (entry.getValue().equals(screenNumber)) {
+            if (entry.getValue().equals(Config.lastScreen)) {
                 category = entry.getKey();
                 break;
             }
         }
-        EditMessageText editMessageText = new EditMessageText();
-        editMessageText.setText("Введите сумму для категории: " + category)
-                .setChatId(getChatId(update))
-                .setMessageId(getMessageId(update));
-        return editMessageText;
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText("Введите сумму для категории: " + category)
+                .setChatId(getChatId(update));
+        return sendMessage;
     }
 
-    public static SendMessage askForSummAfterDetailsOfExpences(int screenNumber, Update update) {
-        Config.screenNumber = -1;
-        Config.lastScreen = screenNumber;
-        Config.enteringSumm = true;
-        Config.fillingBudget = true;
-        String category = "";
-        for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
-            if (entry.getValue().equals(screenNumber)) {
-                category = entry.getKey();
-                break;
-            }
-        }
-        SendMessage editMessageText = new SendMessage();
-        editMessageText.setText("Введите сумму для категории: " + category)
-                .setChatId(getChatId(update));
+    public static EditMessageText askForContragent(Update update) {
+        Config.waitingForContragent = true;
+        Config.fillingBudget=true;
+        Config.screenNumber=-1;
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setText("Укажите контрагента.")
+                .setChatId(getChatId(update))
+                .setMessageId(getMessageId(update));
         return editMessageText;
     }
 
@@ -384,16 +375,17 @@ public class Service {
         return editMessageText;
     }
 
-    public static EditMessageText askForDetailsOfExpences(/*int screenNumber,*/ Update update) {
+    public static EditMessageText askForDetailsOfExpences(int screenNumber, Update update) {
+        Config.lastScreen=screenNumber;
         Config.enteringDetailsOfExpences = true;
-//        String category = "";
-        String category = "Другие расходы";
-//        for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
-//            if (entry.getValue().equals(screenNumber)) {
-//                category = entry.getKey();
-//                break;
-//            }
-//        }
+        String category = "";
+//        String category = "Другие расходы";
+        for (Map.Entry<String, Integer> entry : Config.buttonsNumbers.entrySet()) {
+            if (entry.getValue().equals(screenNumber)) {
+                category = entry.getKey();
+                break;
+            }
+        }
 
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setText("Введите уточнение для категории: " + category)

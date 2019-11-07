@@ -17,9 +17,6 @@ public class Keyboards {
     public static EditMessageText sendInlineKeyBoardMessage(Update update, int screenNumber) {
 
         switch (screenNumber) {
-//            case Config.WELCOME_SCREEN: {    // 0
-//                return generateWelcomeButtons(update);
-//            }
 
             case Config.EXPENSES_SCREEN: {  // 1
                 return generateListOfExpencesButtons(update);
@@ -30,8 +27,7 @@ public class Keyboards {
             }
 
             case Config.EXPENSES_DIFFERENT: { // 10
-//                return Service.askForDetailsOfExpences(screenNumber, update);
-                return Service.askForDetailsOfExpences(update);
+                return Service.askForDetailsOfExpences(screenNumber, update);
             }
 
             case Config.EXPENSES_PERSONAL_SCREEN: { // 11
@@ -75,19 +71,19 @@ public class Keyboards {
             case Config.EXPENSES_MARKETING_CRM:
             case Config.EXPENSES_MARKETING_ENVATO:
             case Config.EXPENSES_MARKETING_TILDA:
-//            case Config.EXPENSES_MARKETING_OTHER:
             case Config.EXPENSES_TAXES_ESV:
             case Config.EXPENSES_TAXES_NDFL:
             case Config.EXPENSES_TAXES_WAR:
             case Config.EXPENSES_TAXES_EDIN:
             case Config.EXPENSES_TAXES_VAT:
             case Config.INCOME_REVENUE:
-            case Config.INCOME_OTHERREVENUE: { // Entering summ
-                return Service.askForSumm(screenNumber, update);
+            case Config.INCOME_OTHERREVENUE: { // Entering contragent
+                Config.lastScreen = screenNumber;
+                return Service.askForContragent(update);
             }
-            case Config.TOTAL_SCREEN: { // Total expences and profit
-                return Service.returnTotalSumms(update);
-            }
+//            case Config.TOTAL_SCREEN: { // Total expences and profit
+//                return Service.returnTotalSumms(update);
+//            }
 
             default: {
                 EditMessageText editMessageText = new EditMessageText();
@@ -490,24 +486,27 @@ public class Keyboards {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton01 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton04 = new InlineKeyboardButton();
         inlineKeyboardButton01.setText("Расходы");
         inlineKeyboardButton01.setCallbackData("Расходы");
+
+        InlineKeyboardButton inlineKeyboardButton02 = new InlineKeyboardButton();
         inlineKeyboardButton02.setText("Доходы");
         inlineKeyboardButton02.setCallbackData("Доходы");
+
+        InlineKeyboardButton inlineKeyboardButton03 = new InlineKeyboardButton();
         inlineKeyboardButton03.setText("Прекратить ввод");
         inlineKeyboardButton03.setCallbackData("Прекратить ввод");
-        inlineKeyboardButton04.setText("Итого баланс");
-        inlineKeyboardButton04.setCallbackData("Итого баланс");
+
+        //        InlineKeyboardButton inlineKeyboardButton04 = new InlineKeyboardButton();
+//        inlineKeyboardButton04.setText("Итого баланс");
+//        inlineKeyboardButton04.setCallbackData("Итого баланс");
 
         List<InlineKeyboardButton> keyboardButtonsRow01 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow02 = new ArrayList<>();
 
         keyboardButtonsRow01.add(inlineKeyboardButton01);
         keyboardButtonsRow01.add(inlineKeyboardButton02);
-        keyboardButtonsRow02.add(inlineKeyboardButton04);
+//        keyboardButtonsRow02.add(inlineKeyboardButton04);
         keyboardButtonsRow02.add(inlineKeyboardButton03);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
