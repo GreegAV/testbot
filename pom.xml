@@ -111,7 +111,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <finalName>OBRTLogBot</finalName>
+                    <finalName>OBRTTestBot</finalName>
                 </configuration>
             </plugin>
 
