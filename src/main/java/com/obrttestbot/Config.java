@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-class Config {
+public class Config {
 
     private static final String BUNDLE_NAME = "config";
 
-    static Map<String, Integer> buttonsNumbers = new HashMap<>();
+    public static Map<String, Integer> buttonsNumbers = new HashMap<>();
     static Map<Integer, String> namesAndIDs = new HashMap<>();
     private static Config instance;
     private ResourceBundle resource;

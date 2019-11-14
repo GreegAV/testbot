@@ -1,0 +1,1 @@
+bot: java -jar target/obrttestbot-1.0.jar

@@ -9,13 +9,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static com.obrttestbot.Service.getChatId;
-import static com.obrttestbot.Service.getMessageId;
 import static com.obrttestbot.Service.resetToDefault;
 
 public class Bot extends TelegramLongPollingBot {
@@ -42,78 +42,7 @@ public class Bot extends TelegramLongPollingBot {
             }
 
 
-            if (message.hasAnimation()) {
-                try {
-                    execute(new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText("Бот не принимает соообщения в виде анимации."));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (message.hasAudio()) {
-                try {
-                    execute(new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText("Бот не принимает аудиосообщения."));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (message.hasVoice()) {
-                try {
-                    execute(new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText("Бот не принимает аудиосообщения."));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (message.hasPhoto()) {
-                try {
-                    execute(new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText("Бот не принимает фото."));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (message.hasDocument()) {
-                try {
-                    execute(new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText("Бот не принимает пока документы."));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (message.hasVideo()) {
-                try {
-                    execute(new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText("Бот не принимает видео."));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (message.hasVideoNote()) {
-                try {
-                    execute(new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText("Бот не принимает видео."));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (message.hasSticker()) {
-                try {
-                    execute(new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText("Бот не понимает стикеры."));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
+            checkIfMessageIsAllowed(update);
 
             if (message.hasText()) {
                 String firstWord;
@@ -123,6 +52,42 @@ public class Bot extends TelegramLongPollingBot {
                     firstWord = message.getText();
                 }
                 switch (firstWord) {
+
+                    case "/testfile@OBRTTestBot":
+                    case "/testfile": {
+                        String text="Testing of existance.\n";
+                        File file = new File("test.txt");
+                        FileWriter writer = null;
+
+                        try {
+                            if (!file.exists()) {
+                                writer = new FileWriter("test.txt");
+                                System.out.println("Creating.");
+                                text+="Creating file.\n";
+                                writer.write("File was made "+new Date()+"\n");
+
+                            } else {
+                                writer = new FileWriter("test.txt",true);
+                                System.out.println("Exist.");
+                                text+="File exists.\n";
+                                writer.write("File was accessed at "+new Date()+"\n");
+                                BufferedReader reader = new BufferedReader(new FileReader(file));
+                                // считаем сначала первую строку
+                                String line = reader.readLine();
+                                while (line != null) {
+                                    text += line + "\n";
+                                    // считываем остальные строки в цикле
+                                    line = reader.readLine();
+                                }
+                            }
+                            writer.flush();
+                            writer.close();
+                            execute(new SendMessage().setChatId(getChatId(update)).setText(text));
+                        } catch (TelegramApiException | IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
                     case "/start@OBRTTestBot":
                     case "/start": {
                         SendMessage messg = new SendMessage()
@@ -135,6 +100,7 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     }
+
                     case "/time@OBRTTestBot":
                     case "/time": {
                         SendMessage messg = new SendMessage()
@@ -257,6 +223,83 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 
+    }
+
+    private void checkIfMessageIsAllowed(Update update) {
+        Message message = update.getMessage();
+
+        if (message.hasAnimation()) {
+            try {
+                execute(new SendMessage()
+                        .setChatId(getChatId(update))
+                        .setText("Бот не принимает соообщения в виде анимации."));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if (message.hasAudio()) {
+            try {
+                execute(new SendMessage()
+                        .setChatId(getChatId(update))
+                        .setText("Бот не принимает аудиосообщения."));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if (message.hasVoice()) {
+            try {
+                execute(new SendMessage()
+                        .setChatId(getChatId(update))
+                        .setText("Бот не принимает аудиосообщения."));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if (message.hasPhoto()) {
+            try {
+                execute(new SendMessage()
+                        .setChatId(getChatId(update))
+                        .setText("Бот не принимает фото."));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if (message.hasDocument()) {
+            try {
+                execute(new SendMessage()
+                        .setChatId(getChatId(update))
+                        .setText("Бот не принимает пока документы."));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if (message.hasVideo()) {
+            try {
+                execute(new SendMessage()
+                        .setChatId(getChatId(update))
+                        .setText("Бот не принимает видео."));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if (message.hasVideoNote()) {
+            try {
+                execute(new SendMessage()
+                        .setChatId(getChatId(update))
+                        .setText("Бот не принимает видео."));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if (message.hasSticker()) {
+            try {
+                execute(new SendMessage()
+                        .setChatId(getChatId(update))
+                        .setText("Бот не понимает стикеры."));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void jokesAboutSumm(Update update) {

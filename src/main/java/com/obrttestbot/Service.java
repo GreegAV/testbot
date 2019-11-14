@@ -87,7 +87,7 @@ public class Service {
         return response.getValues();
     }
 
-    static List<Object> formatStringsForLog(Update update) {
+    public static List<Object> formatStringsForLog(Update update) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String date = dateFormat.format(new Date(update.getMessage().getDate() * 1000L));
         String name = formatUserName(update);
@@ -97,7 +97,7 @@ public class Service {
 
     }
 
-    static void prepareResultString(Update update) {
+    public static void prepareResultString(Update update) {
         //   0      1           2          3       4      5        6          7
         // Дата	Расшифровка	Контрагент	Приход	Расход	Всего	Вид ДДС	Статья ДДС
 
@@ -149,7 +149,7 @@ public class Service {
         }
     }
 
-    static boolean isNumeric(String str) {
+    public static boolean isNumeric(String str) {
         String tmp = str.replace(',', '.');
         tmp = tmp.replace(" ", "")
                 .replace("+", "")
