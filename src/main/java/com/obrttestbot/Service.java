@@ -151,10 +151,14 @@ public class Service {
 
     public static boolean isNumeric(String str) {
         String tmp = str.replace(',', '.');
-        tmp = tmp.replace(" ", "")
-                .replace("+", "")
-                .replace("-", "");
-        if (tmp.indexOf('.') != tmp.lastIndexOf('.'))
+        tmp = tmp.replace(" ", "");
+        if (tmp.indexOf('.') != tmp.lastIndexOf('.') |
+                tmp.lastIndexOf('+') > 0 |
+                tmp.lastIndexOf('-') > 0 |
+                tmp.lastIndexOf('=') >= 0 |
+                tmp.lastIndexOf('*') >= 0 |
+                tmp.lastIndexOf('\\') >= 0 |
+                tmp.lastIndexOf('/') >= 0)
             return false;
         return tmp.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
@@ -213,8 +217,8 @@ public class Service {
 
     public static EditMessageText askForContragent(Update update) {
         Config.waitingForContragent = true;
-        Config.fillingBudget=true;
-        Config.screenNumber=-1;
+        Config.fillingBudget = true;
+        Config.screenNumber = -1;
 
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setText("Укажите контрагента.")
@@ -379,7 +383,7 @@ public class Service {
     }
 
     public static EditMessageText askForDetailsOfExpences(int screenNumber, Update update) {
-        Config.lastScreen=screenNumber;
+        Config.lastScreen = screenNumber;
         Config.enteringDetailsOfExpences = true;
         String category = "";
 //        String category = "Другие расходы";
