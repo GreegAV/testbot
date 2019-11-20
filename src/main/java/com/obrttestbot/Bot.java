@@ -1,5 +1,6 @@
 package com.obrttestbot;
 
+import com.google.api.services.sheets.v4.model.Spreadsheet;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -10,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.*;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -55,7 +57,7 @@ public class Bot extends TelegramLongPollingBot {
 
                     case "/testfile@OBRTTestBot":
                     case "/testfile": {
-                        String text="Testing of existance.\n";
+                        String text = "Testing of existance.\n";
                         File file = new File("test.txt");
                         FileWriter writer = null;
 
@@ -63,14 +65,14 @@ public class Bot extends TelegramLongPollingBot {
                             if (!file.exists()) {
                                 writer = new FileWriter("test.txt");
                                 System.out.println("Creating.");
-                                text+="Creating file.\n";
-                                writer.write("File was made "+new Date()+"\n");
+                                text += "Creating file.\n";
+                                writer.write("File was made " + new Date() + "\n");
 
                             } else {
-                                writer = new FileWriter("test.txt",true);
+                                writer = new FileWriter("test.txt", true);
                                 System.out.println("Exist.");
-                                text+="File exists.\n";
-                                writer.write("File was accessed at "+new Date()+"\n");
+                                text += "File exists.\n";
+                                writer.write("File was accessed at " + new Date() + "\n");
                                 BufferedReader reader = new BufferedReader(new FileReader(file));
                                 // считаем сначала первую строку
                                 String line = reader.readLine();
@@ -93,6 +95,31 @@ public class Bot extends TelegramLongPollingBot {
                         SendMessage messg = new SendMessage()
                                 .setChatId(getChatId(update))
                                 .setText("Welcome. Когда-то тут будет инструкция.");
+                        try {
+                            execute(messg);
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case "/newss@OBRTTestBot":
+                    case "/newss": {
+                        Spreadsheet spreadsheet=null;
+                        String txt = "";
+                        try {
+                            spreadsheet = GoogleTools.newSpreadSheet(update);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (GeneralSecurityException e) {
+                            e.printStackTrace();
+                        }
+                        txt += "getSpreadsheetId "+spreadsheet.getSpreadsheetId()+"\n";
+                        txt += "getSpreadsheetUrl "+spreadsheet.getSpreadsheetUrl()+"\n";
+
+
+                        SendMessage messg = new SendMessage()
+                                .setChatId(getChatId(update))
+                                .setText(txt);
                         try {
                             execute(messg);
                         } catch (TelegramApiException e) {
