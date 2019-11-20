@@ -118,7 +118,6 @@ public class Bot extends TelegramLongPollingBot {
                         txt += "getSpreadsheetId " + spreadsheet.getSpreadsheetId() + "\n";
                         txt += "getSpreadsheetUrl " + spreadsheet.getSpreadsheetUrl() + "\n";
 
-
                         SendMessage messg = new SendMessage()
                                 .setChatId(getChatId(update))
                                 .setText(txt);
@@ -129,7 +128,38 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     }
+                    case "/copyss@OBRTTestBot":
+                    case "/copyss": {
+                        String txt = "";
+                        Spreadsheet spreadsheet = null;
+                        String sheetName = "Copied Spreadsheet From Telegrambot";
+                        try {
+                            if (message.getText().indexOf(" ") > 0) {
+                                sheetName = message.getText().substring(message.getText().indexOf(" "));
+                            }
+                            spreadsheet = GoogleTools.newSpreadSheet(sheetName);
+                            String desSSid = spreadsheet.getSpreadsheetId();
+//          https://docs.google.com/spreadsheets/d/1jdHCIALWS9H8w0BbkRhku_OlPCKLsfuRO3OpNG0k8Kw/edit#gid=515943320
 
+//   https://docs.google.com/spreadsheets/d/19pGjgm96PggwyjbkoV19SyU9QTbV9x4SalmySm56y5A/edit#gid=1190440054
+                            GoogleTools.copySpreadSheet("19pGjgm96PggwyjbkoV19SyU9QTbV9x4SalmySm56y5A",
+                                    1190440054,
+                                    desSSid);
+                        } catch (IOException | GeneralSecurityException e) {
+                            e.printStackTrace();
+                        }
+
+                        txt = spreadsheet.getSpreadsheetUrl();
+                        SendMessage messg = new SendMessage()
+                                .setChatId(getChatId(update))
+                                .setText(txt);
+                        try {
+                            execute(messg);
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
                     case "/time@OBRTTestBot":
                     case "/time": {
                         SendMessage messg = new SendMessage()
@@ -142,6 +172,8 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     }
+
+
                     case "/cashflow@OBRTTestBot":
                     case "/cashflow": {
                         Service.resetToDefault();

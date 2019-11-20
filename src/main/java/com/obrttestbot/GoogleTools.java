@@ -10,9 +10,10 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.CopySheetToAnotherSpreadsheetRequest;
+import com.google.api.services.sheets.v4.model.SheetProperties;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,5 +57,29 @@ public class GoogleTools {
         return getSheetsService()
                 .spreadsheets()
                 .create(spreadSheet).execute();
+    }
+
+    public static void copySpreadSheet(String sourceSpreadSheetId, int sourceSheetId, String destinationSpreadsheetId) throws IOException, GeneralSecurityException {
+        // The ID of the spreadsheet containing the sheet to copy.
+//        String spreadsheetId = "my-spreadsheet-id"; // TODO: Update placeholder value.
+
+        // The ID of the sheet to copy.
+//        int sheetId = 0; // TODO: Update placeholder value.
+
+        // The ID of the spreadsheet to copy the sheet to.
+//        String destinationSpreadsheetId = ""; // TODO: Update placeholder value.
+
+        // TODO: Assign values to desired fields of `requestBody`:
+        CopySheetToAnotherSpreadsheetRequest requestBody = new CopySheetToAnotherSpreadsheetRequest();
+        requestBody.setDestinationSpreadsheetId(destinationSpreadsheetId);
+
+        Sheets sheetsService = getSheetsService();
+        Sheets.Spreadsheets.SheetsOperations.CopyTo request =
+                sheetsService.spreadsheets().sheets().copyTo(sourceSpreadSheetId, sourceSheetId, requestBody);
+
+        SheetProperties response = request.execute();
+
+        // TODO: Change code below to process the `response` object:
+        System.out.println(response);
     }
 }
