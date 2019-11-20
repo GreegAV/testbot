@@ -50,9 +50,7 @@ public class GoogleTools {
                 .build();
     }
 
-    public static Spreadsheet newSpreadSheet(Update update) throws IOException, GeneralSecurityException {
-        String inText=update.getMessage().getText();
-        String sheetName=inText.substring(inText.indexOf(" "));
+    public static Spreadsheet newSpreadSheet(String sheetName) throws IOException, GeneralSecurityException {
         Spreadsheet spreadSheet = new Spreadsheet().setProperties(
                 new SpreadsheetProperties().setTitle(sheetName));
         return getSheetsService()

@@ -104,17 +104,19 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     case "/newss@OBRTTestBot":
                     case "/newss": {
-                        Spreadsheet spreadsheet=null;
+                        Spreadsheet spreadsheet = null;
                         String txt = "";
+                        String sheetName = "New Spreadsheet From Telegrambot";
                         try {
-                            spreadsheet = GoogleTools.newSpreadSheet(update);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (GeneralSecurityException e) {
+                            if (message.getText().indexOf(" ") > 0) {
+                                sheetName = message.getText().substring(message.getText().indexOf(" "));
+                            }
+                            spreadsheet = GoogleTools.newSpreadSheet(sheetName);
+                        } catch (IOException | GeneralSecurityException e) {
                             e.printStackTrace();
                         }
-                        txt += "getSpreadsheetId "+spreadsheet.getSpreadsheetId()+"\n";
-                        txt += "getSpreadsheetUrl "+spreadsheet.getSpreadsheetUrl()+"\n";
+                        txt += "getSpreadsheetId " + spreadsheet.getSpreadsheetId() + "\n";
+                        txt += "getSpreadsheetUrl " + spreadsheet.getSpreadsheetUrl() + "\n";
 
 
                         SendMessage messg = new SendMessage()
