@@ -128,9 +128,10 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     }
+
                     case "/copyss@OBRTTestBot":
                     case "/copyss": {
-                        String txt = "";
+                        String desSSid = "";
                         Spreadsheet spreadsheet = null;
                         String sheetName = "Copied Spreadsheet From Telegrambot";
                         try {
@@ -138,21 +139,17 @@ public class Bot extends TelegramLongPollingBot {
                                 sheetName = message.getText().substring(message.getText().indexOf(" "));
                             }
                             spreadsheet = GoogleTools.newSpreadSheet(sheetName);
-                            String desSSid = spreadsheet.getSpreadsheetId();
-//          https://docs.google.com/spreadsheets/d/1jdHCIALWS9H8w0BbkRhku_OlPCKLsfuRO3OpNG0k8Kw/edit#gid=515943320
-
-//   https://docs.google.com/spreadsheets/d/19pGjgm96PggwyjbkoV19SyU9QTbV9x4SalmySm56y5A/edit#gid=1190440054
-                            GoogleTools.copySpreadSheet("19pGjgm96PggwyjbkoV19SyU9QTbV9x4SalmySm56y5A",
-                                    1190440054,
+                            desSSid = spreadsheet.getSpreadsheetId();
+                            GoogleTools.copySpreadSheet(Config.BILLTEMPLATE_URL,
+                                    Config.BILLTEMPLATESHEETID,
                                     desSSid);
                         } catch (IOException | GeneralSecurityException e) {
                             e.printStackTrace();
                         }
 
-                        txt = spreadsheet.getSpreadsheetUrl();
                         SendMessage messg = new SendMessage()
                                 .setChatId(getChatId(update))
-                                .setText(txt);
+                                .setText("https://docs.google.com/spreadsheets/d/"+desSSid);
                         try {
                             execute(messg);
                         } catch (TelegramApiException e) {

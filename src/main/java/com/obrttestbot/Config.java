@@ -32,10 +32,13 @@ public class Config {
         return (String) resource.getObject(key);
     }
 
+
     static String BOT_NAME;
     static String BOT_TOKEN;
     public static String APPLICATION_NAME;
     public static String SPREADSHEET_URL;
+    public static String BILLTEMPLATE_URL;
+    public static int BILLTEMPLATESHEETID;
     public static int screenNumber = 0;
     public static int lastScreen = 0;
 
@@ -114,6 +117,8 @@ public class Config {
         BOT_TOKEN = config.getProperty("botToken");
         APPLICATION_NAME = config.getProperty("appName");
         SPREADSHEET_URL = config.getProperty("sheetsURL");
+        BILLTEMPLATE_URL = config.getProperty("billTemplate");
+        BILLTEMPLATESHEETID = Integer.parseInt(config.getProperty("billTemplateSheetID"));
 
         buttonsNumbers.put("Прекратить ввод", Config.EXIT);
         buttonsNumbers.put("Расходы", Config.EXPENSES_SCREEN);

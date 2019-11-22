@@ -10,15 +10,13 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.CopySheetToAnotherSpreadsheetRequest;
-import com.google.api.services.sheets.v4.model.SheetProperties;
-import com.google.api.services.sheets.v4.model.Spreadsheet;
-import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
+import com.google.api.services.sheets.v4.model.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -59,17 +57,24 @@ public class GoogleTools {
                 .create(spreadSheet).execute();
     }
 
+    public static void deleteSpreadSheet(String spreadSheetId) throws IOException, GeneralSecurityException {
+        BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new
+                BatchUpdateSpreadsheetRequest();
+
+        Sheets sheetsService = getSheetsService();
+        List<Request> requests = new ArrayList<>();
+        DeleteSheetRequest deleteSheetRequestBody = new DeleteSheetRequest().setSheetId(0);
+
+        requests.add(new Request().setDeleteSheet(deleteSheetRequestBody));
+
+        batchUpdateSpreadsheetRequest.setRequests(requests);
+        Sheets.Spreadsheets.BatchUpdate request =
+                sheetsService.spreadsheets().batchUpdate(spreadSheetId, batchUpdateSpreadsheetRequest);
+
+        request.execute();
+    }
+
     public static void copySpreadSheet(String sourceSpreadSheetId, int sourceSheetId, String destinationSpreadsheetId) throws IOException, GeneralSecurityException {
-        // The ID of the spreadsheet containing the sheet to copy.
-//        String spreadsheetId = "my-spreadsheet-id"; // TODO: Update placeholder value.
-
-        // The ID of the sheet to copy.
-//        int sheetId = 0; // TODO: Update placeholder value.
-
-        // The ID of the spreadsheet to copy the sheet to.
-//        String destinationSpreadsheetId = ""; // TODO: Update placeholder value.
-
-        // TODO: Assign values to desired fields of `requestBody`:
         CopySheetToAnotherSpreadsheetRequest requestBody = new CopySheetToAnotherSpreadsheetRequest();
         requestBody.setDestinationSpreadsheetId(destinationSpreadsheetId);
 
@@ -79,7 +84,7 @@ public class GoogleTools {
 
         SheetProperties response = request.execute();
 
-        // TODO: Change code below to process the `response` object:
-        System.out.println(response);
+        deleteSpreadSheet(destinationSpreadsheetId);
+
     }
 }
