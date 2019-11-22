@@ -63,9 +63,9 @@ public class GoogleTools {
 
         Sheets sheetsService = getSheetsService();
         List<Request> requests = new ArrayList<>();
-        DeleteSheetRequest deleteSheetRequestBody = new DeleteSheetRequest().setSheetId(0);
+        DeleteSheetRequest deleteSheetRequest = new DeleteSheetRequest().setSheetId(0);
 
-        requests.add(new Request().setDeleteSheet(deleteSheetRequestBody));
+        requests.add(new Request().setDeleteSheet(deleteSheetRequest));
 
         batchUpdateSpreadsheetRequest.setRequests(requests);
         Sheets.Spreadsheets.BatchUpdate request =
