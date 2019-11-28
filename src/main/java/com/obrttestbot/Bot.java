@@ -182,14 +182,6 @@ public class Bot extends TelegramLongPollingBot {
                             for (Map.Entry<String, String> entry : Config.billData.entrySet()) {
                                 BillActions.createNewBillSpreadsheet(spreadsheet, entry.getKey(), entry.getValue());
                             }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                            SendMessage messg = new SendMessage()
-//                                    .setChatId(getChatId(update))
-//                                    .setText("https://docs.google.com/spreadsheets/d/" + desSSid);
-//                            execute(messg);
-//                        } catch (IOException | GeneralSecurityException  e) {
-////                            e.printStackTrace();
-////                        }
 
                             SendMessage messg = new SendMessage()
                                     .setChatId(getChatId(update))

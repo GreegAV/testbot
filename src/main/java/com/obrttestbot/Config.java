@@ -122,7 +122,7 @@ public class Config {
         billData.put("i25", "2000");
         billData.put("i26", "12000");
         billData.put("b28", "Дванадцять тисяч грн. 00 копійок");
-        billData.put("h34", "Кічатий Д.Ю");
+        billData.put("h34", "Кічатий Д.Ю.");
         billData.put("i39", "01-12-2019");
 
 
