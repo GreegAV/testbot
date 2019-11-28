@@ -57,7 +57,7 @@ public class GoogleTools {
                 .create(spreadSheet).execute();
     }
 
-    public static void deleteSpreadSheet(String spreadSheetId) throws IOException, GeneralSecurityException {
+    private static void deleteSpreadSheet(String spreadSheetId) throws IOException, GeneralSecurityException {
         BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new
                 BatchUpdateSpreadsheetRequest();
 

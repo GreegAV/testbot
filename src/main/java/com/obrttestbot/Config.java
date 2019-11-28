@@ -10,6 +10,7 @@ public class Config {
 
     public static Map<String, Integer> buttonsNumbers = new HashMap<>();
     static Map<Integer, String> namesAndIDs = new HashMap<>();
+    static Map<String, String> billData = new HashMap<>();
     private static Config instance;
     private ResourceBundle resource;
 
@@ -100,6 +101,31 @@ public class Config {
     public static final int EXIT = 999;
 
     static void loadProperties() {
+        billData.put("c2", "Кічатий Димитрій Юрійович");
+        billData.put("c3", "2943007851");
+        billData.put("c4", "п/р № 26007052700376");
+        billData.put("c5", "ФIЛIЯ РОЗРАХ.ЦЕНТР АТ КБ ПРИВАТБАНК");
+        billData.put("c6", "МФО 320649");
+        billData.put("c8", "ФОП Росочинская Ольга Викторовна");
+        billData.put("c9", "ІПН: 2943007851");
+        billData.put("c12", "ТОВ ОБРТ Консалтинг");
+        billData.put("c13", "ЄДРПОУ: 3461207839");
+        billData.put("c16", "Договір надання послуг №19/15/dnk від 23.10.2019 р.");
+        billData.put("f19", "123");
+        billData.put("e20", "28-11-2019");
+        billData.put("b23", "За надання рекламних послуг");
+        billData.put("f23", "посл.");
+        billData.put("g23", "2");
+        billData.put("h23", "5000");
+        billData.put("i23", "10000");
+        billData.put("i24", "10000");
+        billData.put("i25", "2000");
+        billData.put("i26", "12000");
+        billData.put("b28", "Дванадцять тисяч грн. 00 копійок");
+        billData.put("h34", "Кічатий Д.Ю");
+        billData.put("i39", "01-12-2019");
+
+
         namesAndIDs.put(221816696, "OBRT");         // GreegAV
         namesAndIDs.put(269463036, "ДНК ЭДЖЕНСИ");  //  dma_k
         namesAndIDs.put(224606811, "ДНК ЭДЖЕНСИ");  // Анастасия

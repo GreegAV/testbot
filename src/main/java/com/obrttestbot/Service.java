@@ -15,7 +15,7 @@ import java.util.*;
 public class Service {
     private static Sheets sheetsService;
 
-    private static void writeToSheet(List<Object> sentence, String sheetName) throws IOException, GeneralSecurityException {
+    private static void appendToSheet(List<Object> sentence, String sheetName) throws IOException, GeneralSecurityException {
         sheetsService = GoogleTools.getSheetsService();
 
         ValueRange appendBody = new ValueRange()
@@ -229,7 +229,7 @@ public class Service {
 
     public static void logToSheets(List<Object> stringsToLog, String sheetName) {
         try {
-            Service.writeToSheet(stringsToLog, sheetName);
+            Service.appendToSheet(stringsToLog, sheetName);
         } catch (IOException |
                 GeneralSecurityException e) {
             e.printStackTrace();

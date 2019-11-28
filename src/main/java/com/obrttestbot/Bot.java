@@ -12,10 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.obrttestbot.Service.getChatId;
 import static com.obrttestbot.Service.resetToDefault;
@@ -149,7 +146,7 @@ public class Bot extends TelegramLongPollingBot {
 
                         SendMessage messg = new SendMessage()
                                 .setChatId(getChatId(update))
-                                .setText("https://docs.google.com/spreadsheets/d/"+desSSid);
+                                .setText("https://docs.google.com/spreadsheets/d/" + desSSid);
                         try {
                             execute(messg);
                         } catch (TelegramApiException e) {
@@ -165,6 +162,40 @@ public class Bot extends TelegramLongPollingBot {
                         try {
                             execute(messg);
                         } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+
+                    case "/bill@OBRTTestBot":
+                    case "/bill": {
+                        String desSSid = "";
+                        Spreadsheet spreadsheet = null;
+                        String sheetName = "Рахунок №" + Config.billData.get("f19");
+                        try {
+                            spreadsheet = GoogleTools.newSpreadSheet(sheetName);
+                            desSSid = spreadsheet.getSpreadsheetId();
+                            GoogleTools.copySpreadSheet(Config.BILLTEMPLATE_URL,
+                                    Config.BILLTEMPLATESHEETID,
+                                    desSSid);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            for (Map.Entry<String, String> entry : Config.billData.entrySet()) {
+                                BillActions.createNewBillSpreadsheet(spreadsheet, entry.getKey(), entry.getValue());
+                            }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                            SendMessage messg = new SendMessage()
+//                                    .setChatId(getChatId(update))
+//                                    .setText("https://docs.google.com/spreadsheets/d/" + desSSid);
+//                            execute(messg);
+//                        } catch (IOException | GeneralSecurityException  e) {
+////                            e.printStackTrace();
+////                        }
+
+                            SendMessage messg = new SendMessage()
+                                    .setChatId(getChatId(update))
+                                    .setText("https://docs.google.com/spreadsheets/d/" + desSSid);
+                            execute(messg);
+                        } catch (TelegramApiException | GeneralSecurityException | IOException e) {
                             e.printStackTrace();
                         }
                         break;
